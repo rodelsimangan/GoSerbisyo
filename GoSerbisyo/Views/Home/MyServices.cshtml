@@ -1,0 +1,133 @@
+﻿@model List<GoSerbisyo.Models.ServiceViewModel>
+
+@{
+    ViewBag.Title = "My Services";
+}
+
+<div class="row margin-bottom-5 admin-content">
+    <div class="col-xs-12">
+        <div class="col-xs-6">
+            <div class="page-head">
+                <div class="page-title">
+                    <h1>
+                        <span>My Services</span>
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-xs-12 text-right">
+                    <button id="CreateNewServiceButton" class="btn btn-primary" data-toggle="modal" data-target="#newServiceModal"><i class="fa fa-plus"></i> Offer a Service</button>
+                </div>
+                <div class="grid-container">
+                    <div class="rTable">
+                        <div class="rTableRow">
+                            <div class="rTableHead" style="width:40%;">Name</div>
+                            <div class="rTableHead" style="width:40%;">Description</div>
+                            <div class="rTableHead">&nbsp;</div>
+                            <div class="rTableHead">&nbsp;</div>
+                        </div>
+                    </div>
+
+                    @foreach (var item in Model)
+                    {
+                        <div id="@item.Id" class="rTable grid-parent" expandgrid="0">
+                            <div id="@item.Id" class="rTableRow" expandgrid="0">
+                                <div class="rTableCell text-left" style="width:40%;">@item.Name</div>
+                                <div class="rTableCell text-left" style="width:40%;"><img class="img-thumbnail imgService"  alt="Add Image"/>&nbsp;<button id="@item.Id" class="btn btn-circle btn-xs red DeleteCategoryButton"><span class="fa fa-plus"></span></button></div>
+                                <div class="rTableCell"><input type="hidden" class="userId" /></div>
+                                <div class="rTableCell text-right">
+                                    <button data-toggle="modal" id="@item.Id" class="btn btn-circle btn-xs red UpdateServiceButton"><span class="fa fa-edit"></span></button>
+                                    <button id="@item.Id" class="btn btn-circle btn-xs red DeleteCategoryButton"><span class="fa fa-trash"></span></button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="newServiceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">New Service</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="service-id">
+                        <label for="service-name" class="control-label">Service to offer</label>
+                        <input type="text" class="form-control" id="service-name" placeholder="Ex. Van Rental, Aircon Cleaning">
+                    </div>
+                    <div class="form-group">
+                        <label for="service-description" class="control-label">Describe your service</label>
+                        <textarea class="form-control" rows="5" id="service-description" placeholder="Type in to describe the service."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="service-city" class="control-label">Your location</label>
+                        <input class="form-control" id="service-location" placeholder="Ex. Santa Rosa, Laguna, Quezon City">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnSave" name="btnSave">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#btnSave').click(function (e) {
+        e.preventDefault();
+        var serviceId = $('#service-id').val();
+        var serviceName = $('#service-name').val();
+        var serviceDesc = $('#service-description').val();
+        var serviceLoc = $('#service-location').val();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("AddNewService","Home")",
+            data: {
+                id: serviceId,
+                name: serviceName,
+                description: serviceDesc,
+                location: serviceLoc,
+            },
+            success: function (data) {
+                $('#newServiceModal').modal('hide');
+                location.reload();
+            },
+        });
+    });
+
+    $('.UpdateServiceButton').click(function (e) {
+        e.preventDefault();
+        var serviceId = $(this).prop('id');
+         $.ajax({
+            type: "Get",
+            url: "@Url.Action("GetMyService","Home")",
+            data: {
+                serviceId: serviceId,
+            },
+            success: function (data) {
+               /* for (var key in data) {
+                    var value = data[key];
+                    alert(key + ": " + value);
+                }*/
+                $('#service-id').val(data.Id);
+                $('#service-name').val(data.Name);
+                $('#service-description').val(data.Description);
+                $('#service-location').val(data.Location);
+                $('#newServiceModal').modal('show');
+            },
+        });
+    });
+
+</script>
