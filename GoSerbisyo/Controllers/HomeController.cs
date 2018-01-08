@@ -14,6 +14,7 @@ namespace GoSerbisyo.Controllers
     public class HomeController : Controller
     {
         readonly IServicesAppService _services;
+        readonly IServiceImagesAppService _serviceImages;
         readonly IMembershipAppService _membership;
         readonly IGoSerbisyoDBContext _context;
 
@@ -21,6 +22,7 @@ namespace GoSerbisyo.Controllers
         {
             _context = new GoSerbisyoDBContext();
             _services = new ServicesAppService(_context);
+            _serviceImages = new ServiceImagesAppService(_context);
             _membership = new MembershipAppService();
         }
 
@@ -63,5 +65,25 @@ namespace GoSerbisyo.Controllers
             var model = _services.GetService(ServiceId);
             return Json(model, JsonRequestBehavior.AllowGet);
         }
+
+        
+        public PartialViewResult MyServiceImages(int ServiceId)
+        {
+            ViewData["ServiceId"] = ServiceId;
+            var model = _serviceImages.GetServiceImages(ServiceId);
+            ViewBag.Message = "My Service Images.";
+            return PartialView(model);
+            //return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult GetMyServiceImages(int ServiceId)
+        {
+            ViewData["ServiceId"] = ServiceId;
+            var model = _serviceImages.GetServiceImages(ServiceId);
+            ViewBag.Message = "My Service Images.";
+            return View(model);
+        }
+
     }
 }
