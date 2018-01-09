@@ -33,6 +33,12 @@ namespace GoSerbisyo.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult Index(ServiceViewModel model)
+        {
+            return RedirectToAction("", "Results", model);
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -68,24 +74,24 @@ namespace GoSerbisyo.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         public PartialViewResult MyServiceImages(int ServiceId)
         {
             TempData["ServiceId"] = ServiceId;
+            //var model = _serviceImages.GetServiceImages(ServiceId);
+            //ViewBag.Message = "My Service Images.";
+            //return PartialView(model);
+            return PartialView();
+        }
+
+        [HttpGet]
+        public PartialViewResult GetMyServiceImages()
+        {
+            int ServiceId = int.Parse(TempData["ServiceId"].ToString());
             var model = _serviceImages.GetServiceImages(ServiceId);
             ViewBag.Message = "My Service Images.";
             return PartialView(model);
-            //return Json(model, JsonRequestBehavior.AllowGet);
         }
-
-        /*[HttpGet]
-        public ActionResult GetMyServiceImages(int ServiceId)
-        {
-            TempData["ServiceId"] = ServiceId;
-            var model = _serviceImages.GetServiceImages(ServiceId);
-            ViewBag.Message = "My Service Images.";
-            return View(model);
-        }*/
 
         [AcceptVerbs(HttpVerbs.Post)]
         public JsonResult UploadServiceImage()
@@ -132,5 +138,19 @@ namespace GoSerbisyo.Controllers
             return RedirectToAction("MyServiceImages", new { ServiceId = model.ServiceId });
         }
 
+        public ActionResult DeleteServiceImage(int ServiceImageId)
+        {
+            var model = _serviceImages.GetServiceImage(ServiceImageId);
+            model.IsDeleted = true;
+            _serviceImages.UpsertServiceImage(model);
+            return RedirectToAction("MyServiceImages", new { ServiceId = model.ServiceId });
+        }
+
+        public JsonResult GetMyFirstServiceImage(int ServiceId)
+        {
+            var list = _serviceImages.GetServiceImages(ServiceId);
+            var model = list.FirstOrDefault();
+            return Json(Convert.ToString(model.ImagePath), JsonRequestBehavior.AllowGet);
+        }
     }
 }

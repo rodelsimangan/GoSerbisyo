@@ -19,6 +19,7 @@ namespace GoSerbisyo.AppServices
             try
             {
                 var query = from q in _context.Services
+                            where q.IsDeleted == false || q.IsDeleted == null
                             select q;
 
                 return query.ToList();
@@ -29,6 +30,22 @@ namespace GoSerbisyo.AppServices
             }
         }
 
+        public List<ServiceViewModel> GetServices(string name, string location)
+        {
+            try
+            {
+                var query = from q in _context.Services
+                            where q.IsDeleted == false || q.IsDeleted == null
+                            && (string.IsNullOrEmpty(name) ||  q.Name.ToLower().Contains(name.ToLower())) && (string.IsNullOrEmpty(location) ||  q.Location.ToLower().Contains(location.ToLower()))
+                            select q;
+
+                return query.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public ServiceViewModel GetService(int ServiceId)
         {
             try
