@@ -7,6 +7,8 @@ using System.Web.Security;
 
 using GoSerbisyo.Models;
 using GoSerbisyo.AppServices;
+using System.IO;
+using System.Web.Helpers;
 
 namespace GoSerbisyo.Controllers
 {
@@ -69,20 +71,65 @@ namespace GoSerbisyo.Controllers
         
         public PartialViewResult MyServiceImages(int ServiceId)
         {
-            ViewData["ServiceId"] = ServiceId;
+            TempData["ServiceId"] = ServiceId;
             var model = _serviceImages.GetServiceImages(ServiceId);
             ViewBag.Message = "My Service Images.";
             return PartialView(model);
             //return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
+        /*[HttpGet]
         public ActionResult GetMyServiceImages(int ServiceId)
         {
-            ViewData["ServiceId"] = ServiceId;
+            TempData["ServiceId"] = ServiceId;
             var model = _serviceImages.GetServiceImages(ServiceId);
             ViewBag.Message = "My Service Images.";
             return View(model);
+        }*/
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public JsonResult UploadServiceImage()
+        {
+            string _imgname = string.Empty;
+            string _comPath = string.Empty;
+
+            TempData.Keep("ServiceId");
+
+            if (System.Web.HttpContext.Current.Request.Files.AllKeys.Any())
+            {
+                var pic = System.Web.HttpContext.Current.Request.Files["MyImages"];
+                if (pic.ContentLength > 0)
+                {
+                    var fileName = Path.GetFileName(pic.FileName);
+                    var _ext = Path.GetExtension(pic.FileName);
+
+                    _imgname = Guid.NewGuid().ToString();
+                    _comPath = string.Concat(Server.MapPath("/Uploads/ServiceImages/"), TempData["ServiceId"], "_", _imgname, _ext);
+                    _imgname = string.Concat(TempData["ServiceId"], "_", _imgname, _ext);
+
+                    ViewBag.Msg = _comPath;
+                    var path = _comPath;
+
+                    // Saving Image in Original Mode
+                    pic.SaveAs(path);
+
+                    // resizing image
+                    MemoryStream ms = new MemoryStream();
+                    WebImage img = new WebImage(_comPath);
+
+                    if (img.Width > 200)
+                        img.Resize(200, 200);
+                    img.Save(_comPath);
+                    // end resize
+                }
+            }
+            return Json(Convert.ToString(_imgname), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AddNewServiceImage(ServiceImageViewModel model)
+        {
+            _serviceImages.UpsertServiceImage(model);
+            return RedirectToAction("MyServiceImages", new { ServiceId = model.ServiceId });
         }
 
     }

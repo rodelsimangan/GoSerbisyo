@@ -6,21 +6,12 @@
 
 <div class="row margin-bottom-5 admin-content">
     <div class="col-xs-12">
-        <div class="col-xs-6">
-            <div class="page-head">
-                <div class="page-title">
-                    <h1>
-                        <span>My Service Images</span>
-                    </h1>
-                </div>
-            </div>
-        </div>
-
         <div class="row">
             <div class="col-md-12">
-                <div class="col-xs-12 text-right">
-                    <input type="hidden" class="form-control" id="service-id" value="@ViewData["ServiceId"]" />
-                    <button id="AddServiceImageButton" class="btn btn-primary" data-toggle="modal" data-target="#myServiceImageModal"><i class="fa fa-plus"></i> Add Image</button>
+                <div class="col-xs-12 text-left">
+                    <input type="hidden" class="form-control" id="service-id" value="@TempData["ServiceId"]" />
+                    @{ TempData.Keep("ServiceId"); }
+                    <button id="AddServiceImageButton" class="btn btn-primary" data-toggle="modal" data-target="#AddServiceImageModal"><i class="fa fa-plus"></i> Add Image</button>
                 </div>
                 <div class="col-xs-12">
                     <div class="row">&nbsp;</div>
@@ -34,7 +25,7 @@
                             }
                             var item = Model[i];
                             <div class="col-xs-4">
-                                <img class="img-thumbnail" id="serviceImage" alt="No Image" src="@Url.Content(string.Concat("/Uploads/Galleries/",item.ImagePath))">
+                                <img class="img-thumbnail" id="serviceImage" alt="No Image" src="@Url.Content(string.Concat("/Uploads/ServiceImages/",item.ImagePath))">
                                 <button data-toggle="modal" id="@item.Id" class="btn btn-circle btn-xs red UpdateGalleryButton"><span class="fa fa-edit"></span></button>
                                 <button id="@item.Id" class="btn btn-circle btn-xs red DeleteGalleryButton"><span class="fa fa-trash"></span></button>
                             </div>
@@ -49,29 +40,18 @@
     </div>
 </div>
 
-
-<!-- Small modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Small modal</button>
-
-<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            ...
-        </div>
-    </div>
-</div>
-<!-- Modal -->
-<!--div class="modal fade" id="myServiceImageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!--Modal-->
+<div class="modal fade" id="AddServiceImageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="z-index: 9998">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">My Service</h4>
+                <h4 class="modal-title" id="myModalLabel">Service Images</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="divServiceImageModal">
                 <form role="form" novalidate class="form-validation">
                     <div class="form-group form-md-line-input form-md-floating-label no-hint">
-                        <img id="imgPreview" alt="750 x 500 pixels image recommended" height="200" width="200" src="@Url.Content(string.Concat("/Uploads/Galleries/", ViewData["ImagePath"]))" /><br />
+                        <img id="imgPreview" alt="750 x 500 pixels image recommended" height="200" width="200" src="@Url.Content(string.Concat("/Uploads/ServiceImages/", ViewData["ImagePath"]))" /><br />
                         <input type="file" id="UploadImg" /> <br /><br />
                         <input type="hidden" id="txtImg" name="GalleryPath" value="@ViewData["ImagePath"]" size="50" />
                     </div>
@@ -79,15 +59,56 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="btnSave" name="btnSave">Save changes</button>
+                <button type="button" class="btn btn-primary" id="btnSaveImage" name="btnSaveImage">Save changes</button>
             </div>
         </div>
     </div>
-</div-->
+
+</div>
 
 <script>
 
+    $("#UploadImg").change(function () {
+        var data = new FormData();
+        var serviceId = $('#service-id').val();
+        var files = $("#UploadImg").get(0).files;
+        if (files.length > 0) {
+            data.append("MyImages", files[0]);
+        }
 
+        $.ajax({
+            url: "/Home/UploadServiceImage",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: data,
+            success: function (response) {
+                $("#txtImg").val(response);
+                $("#imgPreview").attr('src', '/Uploads/ServiceImages/' + response);
+            },
+            error: function (er) {
+                alert(er);
+            }
 
+        });
+    });
+
+    $('#btnSaveImage').click(function (e) {
+        e.preventDefault();
+        var serviceId = @TempData["ServiceId"];
+        var imgfile = $('#txtImg').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AddNewServiceImage","Home")",
+                    data: {
+                        serviceId: serviceId,
+                        imagePath: imgfile,
+                    },
+                    success: function (data) {
+                        $('#AddServiceImageModal').modal('hide');
+                    },
+                });
+    });
 
 </script>

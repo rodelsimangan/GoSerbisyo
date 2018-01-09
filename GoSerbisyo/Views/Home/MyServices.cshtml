@@ -87,7 +87,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="myServiceImageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="myServiceImageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="z-index: 9999">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -134,10 +134,6 @@
                 serviceId: serviceId,
             },
             success: function (data) {
-               /* for (var key in data) {
-                    var value = data[key];
-                    alert(key + ": " + value);
-                }*/
                 $('#service-id').val(data.Id);
                 $('#service-name').val(data.Name);
                 $('#service-description').val(data.Description);
