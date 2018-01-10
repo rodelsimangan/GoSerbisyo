@@ -41,5 +41,22 @@ namespace GoSerbisyo.Controllers
             var model = list.FirstOrDefault();
             return Json(Convert.ToString(model.ImagePath), JsonRequestBehavior.AllowGet);
         }
+      
+        [HttpGet]
+        public PartialViewResult DisplayServiceImages(int ServiceId)
+        {
+           // int ServiceId = int.Parse(TempData["ServiceId"].ToString());
+            var model = _serviceImages.GetServiceImages(ServiceId);
+            ViewBag.Message = "My Service Images.";
+            return PartialView(model);
+        }
+
+        [HttpGet]
+        public JsonResult Search()
+        {
+            ServiceViewModel model = new ServiceViewModel();
+            ViewBag.Message = "My Service Images.";
+            return Json(model);
+        }
     }
 }

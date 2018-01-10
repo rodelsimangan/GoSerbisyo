@@ -9,97 +9,68 @@
     <br /><br /><br /><br /><br /><br />
     <div class="row">
         <div class="col-md-12">
-            <div class="col-xs-12 text-left">
-                <form class="form-inline">
+            <div class="col-xs-12 text-left" id="divSeach">
+                @{Html.RenderPartial("Search", new GoSerbisyo.Models.ServiceViewModel());}
+                <!--form class="form-inline">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="service-name" style="width:250px" placeholder="Service: Ex. Van Rental, Aircon Cleaning"> &nbsp;&nbsp;
+                        <input type="text" class="form-control" id="service-name" style="width:350px" placeholder="Service: Ex. Van Rental, Aircon Cleaning"> &nbsp;&nbsp;
                     </div>
                     <div class="form-group">
                         <input class="form-control" id="service-location" style="width:350px" placeholder="Location: Ex. Santa Rosa, Laguna, Quezon City"> &nbsp;&nbsp;
                     </div>
                     <button type="submit" class="btn btn-success" id="btnSearch">Search Again</button>
-                </form>
+                </form-->
             </div>
             <div class="col-xs-12">
-                <br /><br /><br /><h4>@ViewBag.Message</h4><br /><br /><br />
+                <hr />
+                <h4>@ViewBag.Message</h4><hr />
             </div>
             <div class="col-xs-12">
-                <div class="row">&nbsp;</div>
-                @for (int i = 0; i < Model.Count(); i++)
-                {
-                    var ctr = i % 3;
-
-                    if (ctr == 0)
+                <div class="scroll">
+                    <div class="row">&nbsp;</div>
+                    @for (int i = 0; i < Model.Count(); i++)
                     {
-                        @:<div class="row">
-                        }
-                        var item = Model[i];
-                        <div class="col-xs-4">
-                            <span style="font-weight:bold"> @item.Name </span><br />
-                            <button id="@item.Id" class="btn btn-circle btn-xs red AddServiceImageButton">
-                                <img id="@item.Id" class="img-thumbnail imgService " alt="Add Image" />
-                            </button>
-                        </div>
-                        if ((ctr == Model.Count - 1) || (ctr == 2))
+                        var ctr = i % 3;
+
+                        if (ctr == 0)
                         {
-                            @:</div><div class="row">&nbsp;</div>
+                            @:<div class="row">
+                            }
+                            var item = Model[i];
+                            <div class="col-xs-4">
+                                <span style="font-weight:bold; text-align:center;"> @item.Name </span><br />
+                                <button id="@item.Id" class="btn btn-circle btn-xs red btnShowCarousel">
+                                    <img id="@item.Id" class="img-thumbnail imgService " alt="Add Image" />
+                                </button>
+                            </div>
+                            if ((ctr == Model.Count - 1) || (ctr == 2))
+                            {
+                                @:</div><div class="row">&nbsp;</div>
+                            }
                     }
-                }
-            </div>
-
-        </div>
-    </div>
-</div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="myServiceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">My Service</h4>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <input type="hidden" class="form-control" id="service-id">
-                        <label for="service-name" class="control-label">Service to offer</label>
-                        <input type="text" class="form-control" id="service-name" placeholder="Ex. Van Rental, Aircon Cleaning">
-                    </div>
-                    <div class="form-group">
-                        <label for="service-description" class="control-label">Describe your service</label>
-                        <textarea class="form-control" rows="5" id="service-description" placeholder="Type in to describe the service."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="service-city" class="control-label">Your location</label>
-                        <input class="form-control" id="service-location" placeholder="Ex. Santa Rosa, Laguna, Quezon City">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="btnSave" name="btnSave">Save changes</button>
+                </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade" id="myServiceImageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="z-index: 9999">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" id="btnCloseServiceImageModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">My Service Image</h4>
-            </div>
-            <div class="modal-body" id="divServiceImageModal">
-                <p>Load partial view here..</p>
+    <!-- Modal -->
+
+    <div class="modal fade bs-example-modal-lg" id="myServiceImageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="z-index: 9999">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" id="btnCloseServiceImageModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body" id="divServiceImageModal">
+                    <p>Load partial view here..</p>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
+    <script>
 
     $(function () {
 
@@ -113,8 +84,22 @@
             success: function (data) {
                 $('.imgService').attr('src', "/Uploads/ServiceImages/" + data);
             },
-
         });
+
+           $.ajax({
+            type: "Get",
+            url: "@Url.Action("Search","Results")",
+            data: {
+                serviceId: serviceId,
+            },
+            success: function (data) {
+                $('#divSeach').html(data);
+            },
+         });
+
+           $('.scroll').jscroll({
+               autoTrigger: true
+           })
 
     });
 
@@ -135,48 +120,26 @@
         });
     });
 
-    $('.UpdateServiceButton').click(function (e) {
-        e.preventDefault();
-        var serviceId = $(this).prop('id');
-         $.ajax({
-            type: "Get",
-            url: "@Url.Action("GetMyService","Home")",
-            data: {
-                serviceId: serviceId,
-            },
-            success: function (data) {
-                $('#service-id').val(data.Id);
-                $('#service-name').val(data.Name);
-                $('#service-description').val(data.Description);
-                $('#service-location').val(data.Location);
-                $('#myServiceModal').modal('show');
-            },
-        });
-    });
-
-    $('.AddServiceImageButton').click(function (e) {
+    $('.btnShowCarousel').click(function (e) {
 
         e.preventDefault();
         var serviceId = $(this).prop('id');
          $.ajax({
             type: "Get",
-            url: "@Url.Action("MyServiceImages", "Home")",
+            url: "@Url.Action("DisplayServiceImages", "Results")",
             data: {
                 serviceId: serviceId,
             },
             success: function (data) {
-                console.log(data);
                 $('#divServiceImageModal').html(data);
                 $('#myServiceImageModal').modal('show');
+                $('.carousel').carousel({
+                    interval: 2000
+                })
             }
         });
 
     });
 
-    $('#btnCloseServiceImageModal').click(function (e) {
-        e.preventDefault();
-        $('#myServiceImageModal').modal('hide');
-        location.reload(true);
-    });
-
-</script>
+       
+    </script>

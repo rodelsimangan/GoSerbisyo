@@ -318,6 +318,9 @@
     <Content Include="Views\Home\MyServiceImages.cshtml" />
     <Content Include="Views\Home\GetMyServiceImages.cshtml" />
     <Content Include="Views\Results\Index.cshtml" />
+    <Content Include="Views\Results\DisplayServiceImages.cshtml" />
+    <Content Include="Views\Results\Search.cshtml" />
+    <Content Include="Views\Results\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
