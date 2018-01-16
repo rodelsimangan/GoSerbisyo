@@ -6,8 +6,24 @@ namespace GoSerbisyo.Models
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
-        [Display(Name = "Email")]
+        [Display(Name = "User Name")]
         public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "Full Name")]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Street Address")]
+        public string Address { get; set; }
+
+        [Required]
+        [Display(Name = "City / Municipality")]
+        public string Location { get; set; }
+
+        [Required]
+        [Display(Name = "Contact Number(s)")]
+        public string ContactNumber { get; set; }
     }
 
     public class ExternalLoginListViewModel

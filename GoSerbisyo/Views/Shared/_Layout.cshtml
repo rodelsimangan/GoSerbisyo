@@ -22,6 +22,7 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzzjc4KZD6yKQEuXi-DDa5BWt3iN09joo&sensor=false&libraries=places"></script>
 
 </head>
 <body id="home">
@@ -38,7 +39,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    @if(User.Identity.IsAuthenticated)
+                    { 
                     <li>@Html.ActionLink("My Services", "MyServices", "Home")</li>
+                    }
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
