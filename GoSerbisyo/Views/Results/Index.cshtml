@@ -26,7 +26,7 @@
                 <h4>@ViewBag.Message</h4><hr />
             </div>
             <div class="col-xs-12">
-                <div class="scroll">
+                <div>
                     <div class="row">&nbsp;</div>
                     @for (int i = 0; i < Model.Count(); i++)
                     {
@@ -37,34 +37,17 @@
                             @:<div class="row">
                             }
                             var item = Model[i];
-                            <div class="col-xs-4">
-                                <span style="font-weight:bold; text-align:center;"> @item.Name </span><br />
-                                <button id="@item.Id" class="btn btn-circle btn-xs red btnShowCarousel">
-                                    <img id="@item.Id" class="img-thumbnail imgService " alt="Add Image" />
-                                </button>
-                            </div>
+                                  <div class="col-xs-4 text-center">
+                                      <span style="font-weight:bold; text-align:center;"><a href="@Url.Action("Details","Results", new { s = item.Id  })" target="_blank" id="@item.Id"> @item.Name</a> </span><br /><br />
+                                      <span style="font-weight:bold; text-align:center;"> @item.Location </span><br /><br />                                      
+                                      <img id="@item.Id" class="img-thumbnail imgService " alt="Add Image" />                                      
+                                  </div>
                             if ((ctr == Model.Count - 1) || (ctr == 2))
                             {
                                 @:</div><div class="row">&nbsp;</div>
                             }
                     }
                 </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal -->
-
-    <div class="modal fade bs-example-modal-lg" id="myServiceImageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="z-index: 9999">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" id="btnCloseServiceImageModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel"></h4>
-                </div>
-                <div class="modal-body" id="divServiceImageModal">
-                    <p>Load partial view here..</p>
                 </div>
             </div>
         </div>
@@ -96,11 +79,7 @@
                 $('#divSeach').html(data);
             },
          });
-
-           $('.scroll').jscroll({
-               autoTrigger: true
-           })
-
+          
     });
 
     $('#btnSearch').click(function (e) {
@@ -119,27 +98,5 @@
             },
         });
     });
-
-    $('.btnShowCarousel').click(function (e) {
-
-        e.preventDefault();
-        var serviceId = $(this).prop('id');
-         $.ajax({
-            type: "Get",
-            url: "@Url.Action("DisplayServiceImages", "Results")",
-            data: {
-                serviceId: serviceId,
-            },
-            success: function (data) {
-                $('#divServiceImageModal').html(data);
-                $('#myServiceImageModal').modal('show');
-                $('.carousel').carousel({
-                    interval: 2000
-                })
-            }
-        });
-
-    });
-
-       
+        
     </script>

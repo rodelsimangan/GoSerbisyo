@@ -6,7 +6,7 @@ namespace GoSerbisyo.Models
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
-        [Display(Name = "User Name")]
+        [Display(Name = "Facebook Email")]
         public string Email { get; set; }
 
         [Required]

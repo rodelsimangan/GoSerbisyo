@@ -31,6 +31,22 @@ namespace GoSerbisyo.AppServices
             {
                 throw ex;
             }
-        }        
+        }
+
+        public ApplicationUser GetUser(string UserId)
+        {
+            try
+            {
+                var query = from u in _userContext.Users
+                            where u.Id == UserId
+                            select u;
+                var user = query.FirstOrDefault();
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

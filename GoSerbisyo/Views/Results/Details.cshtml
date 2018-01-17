@@ -1,15 +1,77 @@
-﻿@model GoSerbisyo.Models.ServiceViewModel
+﻿@model GoSerbisyo.Models.ResultViewModel
 
-<div class="row">
-    <div class="col-md-12">
-        <h4>@Model.Name</h4>
-        <h4>@Model.Location</h4>
+<div class="col-md-12">
+    <div class="col-md-9">
+        <div class="row">
+            <br /><br /><br /><br /><br /><br />
+            <h3>@Model.ServiceName</h3>
+            <h4>@Model.ServiceLocation</h4><br /><br />
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div id="divServiceImageModal">
+                    @Html.HiddenFor(m => m.ServiceId)
+                    <p>Load partial view here..</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            &nbsp;
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <p style="white-space:pre-wrap;">@Model.ServiceDescription</p>
+            </div>
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="form-group">
-            <p>@Model.Description</p>
+    <div class="col-md-3">
+        <div class="row">
+            <div class="form-group">
+                <br /><br /><br /><br /><br /><br />
+                <label class="control-label">Posted by:</label>
+                <p>@Model.UserName</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="control-label">Location:</label>
+                <p>@Model.UserLocation</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="control-label">Contact No.(s):</label>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <p>@Model.UserContactNumber</p>
+                }
+                else
+                {
+                    <p>@Html.ActionLink("Login", "Login", "Account") to view Contact Number</p>
+                }
+            </div>
         </div>
     </div>
 </div>
+<script>
+    $(function () {
+        var serviceId = $('#ServiceId').val();
+        $.ajax({
+            type: "Get",
+            url: "@Url.Action("DisplayServiceImages", "Results")",
+            data: {
+                serviceId: serviceId,
+            },
+            success: function (data) {
+                $('#divServiceImageModal').html(data);
+                $('.carousel').carousel({
+                    //interval: 2000
+                })
+            }
+        });
+
+        $('.scroll').jscroll({
+            autoTrigger: false
+        })
+    });
+</script>

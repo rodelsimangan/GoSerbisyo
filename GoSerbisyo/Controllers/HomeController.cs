@@ -63,6 +63,8 @@ namespace GoSerbisyo.Controllers
 
         public ActionResult AddNewService(ServiceViewModel model)
         {
+            var userId = _membership.GetUserId(User.Identity.Name);
+            model.UserId = userId;
             _services.UpsertService(model);
             return RedirectToAction("MyServices");
         }

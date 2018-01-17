@@ -69,16 +69,5 @@
         };
         var input = document.getElementById('Location');
         var places = new google.maps.places.Autocomplete(input, options);
-        //var places = new google.maps.places.Autocomplete(document.getElementById('Location'));
-            /*google.maps.event.addListener(places, 'place_changed', function () {
-                var place = places.getPlace();
-                var address = place.formatted_address;
-                var latitude = place.geometry.location.lat();
-                var longitude = place.geometry.location.lng();
-                var mesg = "Address: " + address;
-                mesg += "\nLatitude: " + latitude;
-                mesg += "\nLongitude: " + longitude;
-                alert(mesg);
-            }); */
         });
 </script>

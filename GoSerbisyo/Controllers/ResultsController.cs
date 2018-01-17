@@ -58,5 +58,24 @@ namespace GoSerbisyo.Controllers
             ViewBag.Message = "My Service Images.";
             return Json(model);
         }
+
+        public ActionResult Details(int s)
+        {
+            ResultViewModel model = new ResultViewModel();
+            var service = _services.GetService(s);
+            var user = _membership.GetUser(service.UserId);
+            if(service!=null && user !=null)
+            {
+                model.ServiceId = service.Id;
+                model.ServiceName = service.Name;
+                model.ServiceDescription = service.Description;
+                model.ServiceLocation = service.Location;
+                model.UserId = user.Id;
+                model.UserName = user.Name;
+                model.UserLocation = user.Location;
+                model.UserContactNumber = user.ContactNumber;
+            }
+            return View(model);
+        }
     }
 }

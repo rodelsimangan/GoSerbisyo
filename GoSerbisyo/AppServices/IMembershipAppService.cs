@@ -11,5 +11,6 @@ namespace GoSerbisyo.AppServices
     public interface IMembershipAppService
     {
         string GetUserId(string UserName);
+        ApplicationUser GetUser(string UserId);
     }
 }
