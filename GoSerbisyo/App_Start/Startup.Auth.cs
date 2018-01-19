@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -6,6 +7,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using GoSerbisyo.Models;
+using Microsoft.Owin.Security.Facebook;
 
 namespace GoSerbisyo
 {
@@ -34,7 +36,7 @@ namespace GoSerbisyo
                         validateInterval: TimeSpan.FromMinutes(30),
                         regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
                 }
-            });            
+            });
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
             // Enables the application to temporarily store user information when they are verifying the second factor in the two-factor authentication process.
@@ -53,10 +55,19 @@ namespace GoSerbisyo
             //app.UseTwitterAuthentication(
             //   consumerKey: "",
             //   consumerSecret: "");
+            var appId = ConfigurationManager.AppSettings["AppId"].ToString();
+            var appSecret = ConfigurationManager.AppSettings["AppSecret"].ToString();
 
-            app.UseFacebookAuthentication(
-               appId: "521691674869125",
-               appSecret: "43f8b0dff0189695b5a51146de689e94");
+            var options = new FacebookAuthenticationOptions()
+            {
+                AppId = appId,
+                AppSecret = appSecret
+            };
+            options.Scope.Add("public_profile");
+            options.Scope.Add("email");
+            options.Scope.Add("user_photos");
+            options.Scope.Add("user_about_me");
+            app.UseFacebookAuthentication(options);
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{

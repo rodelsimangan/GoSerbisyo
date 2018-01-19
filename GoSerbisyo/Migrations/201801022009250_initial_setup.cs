@@ -47,10 +47,12 @@ namespace GoSerbisyo.Migrations
                     AccessFailedCount = c.Int(nullable: false),
                     UserName = c.String(nullable: false, maxLength: 256),
                     Name = c.String(),
+                    NameIdentifier = c.String(),
+                    ProfilePicture = c.String(),
                     Address = c.String(),
                     Location = c.String(),
                     ContactNumber = c.String(),
-
+                    ShowProfileLink = c.Boolean(),
                 })
                 .PrimaryKey(t => t.Id)
                 .Index(t => t.UserName, unique: true, name: "UserNameIndex");

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -9,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using GoSerbisyo.Models;
+using Facebook;
 
 namespace GoSerbisyo.Controllers
 {
@@ -322,6 +324,7 @@ namespace GoSerbisyo.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
+        
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
@@ -343,7 +346,12 @@ namespace GoSerbisyo.Controllers
                     // If the user does not have an account, then prompt the user to create an account
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                    
+                    var email = loginInfo.ExternalIdentity.FindFirstValue(ClaimTypes.Email);                    
+                    var name = loginInfo.ExternalIdentity.FindFirstValue(ClaimTypes.Name);
+                    var nameIdentifier = loginInfo.ExternalIdentity.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var picture = $"https://graph.facebook.com/{nameIdentifier}/picture?type=large";
+                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email, Name = name, NameIdentfier = nameIdentifier, ProfilePicture = picture });
             }
         }
 

@@ -14,6 +14,12 @@ namespace GoSerbisyo.Models
         public string Name { get; set; }
 
         [Required]
+        public string NameIdentfier { get; set; }
+
+        [Required]
+        public string ProfilePicture { get; set; }
+
+        [Required]
         [Display(Name = "Street Address")]
         public string Address { get; set; }
 
@@ -24,6 +30,9 @@ namespace GoSerbisyo.Models
         [Required]
         [Display(Name = "Contact Number(s)")]
         public string ContactNumber { get; set; }
+        
+        [Display(Name = "Link my Facebook Profile in my Services")]
+        public bool ShowProfileLink { get; set; }
     }
 
     public class ExternalLoginListViewModel
