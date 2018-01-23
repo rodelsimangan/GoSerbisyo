@@ -29,7 +29,14 @@
             <div class="form-group">
                 <br /><br /><br /><br /><br /><br />
                 <label class="control-label">Posted by:</label>
-                <p>@Model.UserName</p>
+                @if (User.Identity.IsAuthenticated && Model.ServiceLinkToProfile)
+                {
+                    <p><a href="@string.Concat("https://www.facebook.com//", Model.UserNameIdentifier)">@Model.UserName</a></p>
+                }
+                else
+                {
+                    <p>@Model.UserName</p>
+                }
             </div>
         </div>
         <div class="row">

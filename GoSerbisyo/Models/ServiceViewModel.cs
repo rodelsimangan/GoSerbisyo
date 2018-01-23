@@ -15,6 +15,7 @@ namespace GoSerbisyo.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }
+        public bool LinkToProfile { get; set; }
         public bool? IsDeleted { get; set; }
     }
 }

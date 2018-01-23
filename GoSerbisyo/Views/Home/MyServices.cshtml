@@ -97,6 +97,11 @@
                         <label for="service-city" class="control-label">Your location</label>
                         <input class="form-control" id="service-location" placeholder="Ex. Santa Rosa, Laguna, Quezon City">
                     </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="service-linktoprofile"> &nbsp;
+                        <label for="service-linktoprofile" class="control-label">Link my Facebook Profile to this service.</label>
+                    </div>
+
                 </form>
             </div>
             <div class="modal-footer">
@@ -146,6 +151,8 @@
         var serviceName = $('#service-name').val();
         var serviceDesc = $('#service-description').val();
         var serviceLoc = $('#service-location').val();
+        var serviceLinkToProfile = $('#service-linktoprofile').is(":checked");
+        
         $.ajax({
             type: "POST",
             url: "@Url.Action("AddNewService","Home")",
@@ -154,6 +161,7 @@
                 name: serviceName,
                 description: serviceDesc,
                 location: serviceLoc,
+                linktoprofile: serviceLinkToProfile,
             },
             success: function (data) {
                 $('#myServiceModal').modal('hide');
@@ -176,6 +184,7 @@
                 $('#service-name').val(data.Name);
                 $('#service-description').val(data.Description);
                 $('#service-location').val(data.Location);
+                $('#service-linktoprofile').prop("checked", data.LinkToProfile);                
                 $('#myServiceModal').modal('show');
             },
         });

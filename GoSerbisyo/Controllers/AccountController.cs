@@ -324,7 +324,7 @@ namespace GoSerbisyo.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
-        
+
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
@@ -346,12 +346,12 @@ namespace GoSerbisyo.Controllers
                     // If the user does not have an account, then prompt the user to create an account
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    
-                    var email = loginInfo.ExternalIdentity.FindFirstValue(ClaimTypes.Email);                    
+
+                    var email = loginInfo.ExternalIdentity.FindFirstValue(ClaimTypes.Email);
                     var name = loginInfo.ExternalIdentity.FindFirstValue(ClaimTypes.Name);
                     var nameIdentifier = loginInfo.ExternalIdentity.FindFirstValue(ClaimTypes.NameIdentifier);
                     var picture = $"https://graph.facebook.com/{nameIdentifier}/picture?type=large";
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email, Name = name, NameIdentfier = nameIdentifier, ProfilePicture = picture });
+                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email, Name = name, NameIdentifier = nameIdentifier, ProfilePicture = picture });
             }
         }
 
@@ -383,7 +383,9 @@ namespace GoSerbisyo.Controllers
                     Name = model.Name,
                     Address = model.Address,
                     Location = model.Location,
-                    ContactNumber = model.ContactNumber
+                    ContactNumber = model.ContactNumber,
+                    NameIdentifier = model.NameIdentifier,
+                    ProfilePicture = model.ProfilePicture,
                 };
 
                 var result = await UserManager.CreateAsync(user);

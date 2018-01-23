@@ -52,7 +52,6 @@ namespace GoSerbisyo.Migrations
                     Address = c.String(),
                     Location = c.String(),
                     ContactNumber = c.String(),
-                    ShowProfileLink = c.Boolean(),
                 })
                 .PrimaryKey(t => t.Id)
                 .Index(t => t.UserName, unique: true, name: "UserNameIndex");

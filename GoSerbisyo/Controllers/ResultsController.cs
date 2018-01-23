@@ -70,10 +70,13 @@ namespace GoSerbisyo.Controllers
                 model.ServiceName = service.Name;
                 model.ServiceDescription = service.Description;
                 model.ServiceLocation = service.Location;
+                model.ServiceLinkToProfile = service.LinkToProfile;
+
                 model.UserId = user.Id;
                 model.UserName = user.Name;
                 model.UserLocation = user.Location;
                 model.UserContactNumber = user.ContactNumber;
+                model.UserNameIdentifier = user.NameIdentifier;
             }
             return View(model);
         }

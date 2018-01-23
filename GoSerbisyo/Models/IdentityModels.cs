@@ -13,9 +13,8 @@ namespace GoSerbisyo.Models
         public string Address { get; set; }
         public string Location { get; set; }
         public string ContactNumber { get; set; }
-        public string NameIdentfier { get; set; }
+        public string NameIdentifier { get; set; }
         public string ProfilePicture { get; set; }
-        public bool ShowProfileLink { get; set; }
 
     public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
