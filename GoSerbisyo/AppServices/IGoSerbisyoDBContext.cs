@@ -13,10 +13,12 @@ namespace GoSerbisyo.AppServices
 {
     public interface IGoSerbisyoDBContext
     {
-        DbSet<ServiceViewModel> Services { get; set; }
-        DbSet<ServiceImageViewModel> ServiceImages { get; set; }
-        DbSet<RatingViewModel> Ratings { get; set; }
+        DbSet<ServiceModel> Services { get; set; }
+        DbSet<ServiceImageModel> ServiceImages { get; set; }
+        DbSet<RatingModel> Ratings { get; set; }
+        DbSet<ReportModel> Reports { get; set; }
         DbSet<WatchlistViewModel> Watchlists { get; set; }
+        DbSet<MessageModel> Messages { get; set; }
 
         int SaveChanges();
         IEnumerable<DbEntityValidationResult> GetValidationErrors();

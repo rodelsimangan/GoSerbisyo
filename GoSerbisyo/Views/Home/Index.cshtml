@@ -1,4 +1,4 @@
-﻿@model GoSerbisyo.Models.ServiceViewModel
+﻿@model GoSerbisyo.Models.ServiceModel
 
 <div class="intro">
     <div class="fullpage">
@@ -43,6 +43,7 @@
 <div class="contact wowload fadeIn">
 
     <div class="container">
+        <h4 class="text-center">@ViewBag.Message</h4>
         <h2 class="text-center">Contact us</h2>
         <div class="row">
             <div class="col-sm-6 col-sm-offset-3">
@@ -56,7 +57,7 @@
                     <div class="form-group">
                         <textarea id="message" name="message" class="form-control" placeholder="Your Message" rows="5"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-warning"><i class="fa fa-send-o"></i> Submit</button>
+                    <button id="btnContact" type="submit" class="btn btn-success"><i class="fa fa-send-o"></i> Submit</button>
                 </form>
 
             </div>
@@ -64,3 +65,26 @@
     </div>
 </div>
 <!-- contact -->
+
+<script>
+    $('#btnContact').click(function (e) {
+        e.preventDefault();
+        var name = $('#name').val();
+        var email = $('#email').val();
+        var message = $('#message').val();
+        
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("SendMessage","Home")",
+            data: {
+                name: name,
+                emailaddress: email,
+                content: message,
+            },
+            success: function (data) {
+                alert("Your message has been sent!");
+                location.reload();
+            },
+        });
+    });
+</script>

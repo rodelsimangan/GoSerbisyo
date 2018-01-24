@@ -16,10 +16,11 @@ namespace GoSerbisyo.AppServices
         {
         }
 
-        public DbSet<ServiceViewModel> Services { get; set; }
-        public DbSet<ServiceImageViewModel> ServiceImages { get; set; }
-        public DbSet<RatingViewModel> Ratings { get; set; }
+        public DbSet<ServiceModel> Services { get; set; }
+        public DbSet<ServiceImageModel> ServiceImages { get; set; }
+        public DbSet<RatingModel> Ratings { get; set; }
         public DbSet<WatchlistViewModel> Watchlists { get; set; }
-
+        public DbSet<ReportModel> Reports { get; set; }
+        public DbSet<MessageModel> Messages { get; set; }
     }
 }

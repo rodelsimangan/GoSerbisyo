@@ -7,19 +7,21 @@ using GoSerbisyo.Models;
 
 namespace GoSerbisyo.AppServices
 {
-    public class ServicesAppService : IServicesAppService
+    public class ServiceReportsAppService : IServiceReportsAppService
     {
         IGoSerbisyoDBContext _context;
-        public ServicesAppService(IGoSerbisyoDBContext context)
+        public ServiceReportsAppService(IGoSerbisyoDBContext context)
         {
             _context = context;
         }
-        public List<ServiceModel> GetServices(string UserId)
+
+        public List<ReportModel> GetServiceReports(int ServiceId)
         {
             try
             {
-                var query = from q in _context.Services
+                var query = from q in _context.Reports
                             where q.IsDeleted == false || q.IsDeleted == null
+                            && q.ServiceId == ServiceId
                             select q;
 
                 return query.ToList();
@@ -30,31 +32,15 @@ namespace GoSerbisyo.AppServices
             }
         }
 
-        public List<ServiceModel> GetServices(string name, string location)
+        public ReportModel GetServiceReport(int ServiceReportId)
         {
             try
             {
-                var query = from q in _context.Services
-                            where q.IsDeleted == false || q.IsDeleted == null
-                            && (string.IsNullOrEmpty(name) ||  q.Name.ToLower().Contains(name.ToLower())) && (string.IsNullOrEmpty(location) ||  q.Location.ToLower().Contains(location.ToLower()))
-                            select q;
-
-                return query.ToList();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public ServiceModel GetService(int ServiceId)
-        {
-            try
-            {
-                if (ServiceId == 0)
+                if (ServiceReportId == 0)
                     throw new NullReferenceException();
 
-                var query = from q in _context.Services
-                            where q.Id == ServiceId
+                var query = from q in _context.Reports
+                            where q.Id == ServiceReportId
                             select q;
 
                 return query.AsNoTracking().FirstOrDefault();
@@ -65,12 +51,12 @@ namespace GoSerbisyo.AppServices
             }
         }
 
-        public void UpsertService(ServiceModel input)
+        public void UpsertServiceReport(ReportModel input)
         {
             try
             {
                 if (input.Id == 0)
-                    _context.Services.Add(input);
+                    _context.Reports.Add(input);
                 else
                     _context.Entry(input).State = EntityState.Modified;
                 _context.SaveChanges();
@@ -81,15 +67,15 @@ namespace GoSerbisyo.AppServices
             }
         }
 
-        public void RemoveService(int ServiceId)
+        public void RemoveServiceReport(int ServiceReportId)
         {
             try
             {
-                if (ServiceId == 0)
+                if (ServiceReportId == 0)
                     throw new NullReferenceException();
-                var service = GetService(ServiceId);
-                service.IsDeleted = true;
-                _context.Entry(service).State = EntityState.Modified;
+                var Report = GetServiceReport(ServiceReportId);
+                Report.IsDeleted = true;
+                _context.Entry(Report).State = EntityState.Modified;
                 _context.SaveChanges();
             }
             catch (Exception ex)

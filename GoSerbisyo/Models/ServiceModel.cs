@@ -7,15 +7,16 @@ using System.Web;
 
 namespace GoSerbisyo.Models
 {
-    [Table("Ratings")]
-    public class RatingViewModel
+    [Table("Services")]
+    public class ServiceModel
     {
         public int Id { get; set; }
         public string UserId { get; set; }
-        public string LoginId { get; set; }
-        public bool? IsPositive { get; set; }
-        public bool? IsNegative { get; set; }
-        public string Comment { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Location { get; set; }
+        public bool LinkToProfile { get; set; }
+        public bool SendToMessenger { get; set; }
         public bool? IsDeleted { get; set; }
     }
 }

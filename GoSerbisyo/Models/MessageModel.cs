@@ -7,15 +7,13 @@ using System.Web;
 
 namespace GoSerbisyo.Models
 {
-    [Table("Services")]
-    public class ServiceViewModel
+    [Table("Messages")]
+    public class MessageModel
     {
         public int Id { get; set; }
-        public string UserId { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-        public string Location { get; set; }
-        public bool LinkToProfile { get; set; }
+        public string EmailAddress { get; set; }
+        public string Content { get; set; }
         public bool? IsDeleted { get; set; }
     }
 }

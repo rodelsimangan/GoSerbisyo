@@ -7,18 +7,19 @@ using GoSerbisyo.Models;
 
 namespace GoSerbisyo.AppServices
 {
-    public class ServicesAppService : IServicesAppService
+    public class MessagesAppService : IMessagesAppService
     {
         IGoSerbisyoDBContext _context;
-        public ServicesAppService(IGoSerbisyoDBContext context)
+        public MessagesAppService(IGoSerbisyoDBContext context)
         {
             _context = context;
         }
-        public List<ServiceModel> GetServices(string UserId)
+
+        public List<MessageModel> GetMessages()
         {
             try
             {
-                var query = from q in _context.Services
+                var query = from q in _context.Messages
                             where q.IsDeleted == false || q.IsDeleted == null
                             select q;
 
@@ -30,31 +31,15 @@ namespace GoSerbisyo.AppServices
             }
         }
 
-        public List<ServiceModel> GetServices(string name, string location)
+        public MessageModel GetMessage(int MessageId)
         {
             try
             {
-                var query = from q in _context.Services
-                            where q.IsDeleted == false || q.IsDeleted == null
-                            && (string.IsNullOrEmpty(name) ||  q.Name.ToLower().Contains(name.ToLower())) && (string.IsNullOrEmpty(location) ||  q.Location.ToLower().Contains(location.ToLower()))
-                            select q;
-
-                return query.ToList();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public ServiceModel GetService(int ServiceId)
-        {
-            try
-            {
-                if (ServiceId == 0)
+                if (MessageId == 0)
                     throw new NullReferenceException();
 
-                var query = from q in _context.Services
-                            where q.Id == ServiceId
+                var query = from q in _context.Messages
+                            where q.Id == MessageId
                             select q;
 
                 return query.AsNoTracking().FirstOrDefault();
@@ -65,12 +50,12 @@ namespace GoSerbisyo.AppServices
             }
         }
 
-        public void UpsertService(ServiceModel input)
+        public void UpsertMessage(MessageModel input)
         {
             try
             {
                 if (input.Id == 0)
-                    _context.Services.Add(input);
+                    _context.Messages.Add(input);
                 else
                     _context.Entry(input).State = EntityState.Modified;
                 _context.SaveChanges();
@@ -81,15 +66,15 @@ namespace GoSerbisyo.AppServices
             }
         }
 
-        public void RemoveService(int ServiceId)
+        public void RemoveMessage(int MessageId)
         {
             try
             {
-                if (ServiceId == 0)
+                if (MessageId == 0)
                     throw new NullReferenceException();
-                var service = GetService(ServiceId);
-                service.IsDeleted = true;
-                _context.Entry(service).State = EntityState.Modified;
+                var Message = GetMessage(MessageId);
+                Message.IsDeleted = true;
+                _context.Entry(Message).State = EntityState.Modified;
                 _context.SaveChanges();
             }
             catch (Exception ex)

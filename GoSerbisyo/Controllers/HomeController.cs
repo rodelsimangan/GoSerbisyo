@@ -18,6 +18,7 @@ namespace GoSerbisyo.Controllers
         readonly IServicesAppService _services;
         readonly IServiceImagesAppService _serviceImages;
         readonly IMembershipAppService _membership;
+        readonly IMessagesAppService _message;
         readonly IGoSerbisyoDBContext _context;
 
         public HomeController()
@@ -26,6 +27,7 @@ namespace GoSerbisyo.Controllers
             _services = new ServicesAppService(_context);
             _serviceImages = new ServiceImagesAppService(_context);
             _membership = new MembershipAppService();
+            _message = new MessagesAppService(_context);
         }
 
         public ActionResult Index()
@@ -34,7 +36,7 @@ namespace GoSerbisyo.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(ServiceViewModel model)
+        public ActionResult Index(ServiceModel model)
         {
             return RedirectToAction("", "Results", model);
         }
@@ -57,11 +59,11 @@ namespace GoSerbisyo.Controllers
         {
             ViewBag.Message = "My Services.";
             var userId = _membership.GetUserId(User.Identity.Name);
-            List<ServiceViewModel> model = _services.GetServices(userId);
+            List<ServiceModel> model = _services.GetServices(userId);
             return View(model);
         }
 
-        public ActionResult AddNewService(ServiceViewModel model)
+        public ActionResult AddNewService(ServiceModel model)
         {
             var userId = _membership.GetUserId(User.Identity.Name);
             model.UserId = userId;
@@ -134,7 +136,7 @@ namespace GoSerbisyo.Controllers
             return Json(Convert.ToString(_imgname), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AddNewServiceImage(ServiceImageViewModel model)
+        public ActionResult AddNewServiceImage(ServiceImageModel model)
         {
             _serviceImages.UpsertServiceImage(model);
             return RedirectToAction("MyServiceImages", new { ServiceId = model.ServiceId });
@@ -150,9 +152,23 @@ namespace GoSerbisyo.Controllers
 
         public JsonResult GetMyFirstServiceImage(int ServiceId)
         {
-            var list = _serviceImages.GetServiceImages(ServiceId);
-            var model = list.FirstOrDefault();
-            return Json(Convert.ToString(model.ImagePath), JsonRequestBehavior.AllowGet);
+            try
+            {
+                var list = _serviceImages.GetServiceImages(ServiceId);
+                var model = list.FirstOrDefault();
+                return Json(Convert.ToString(model.ImagePath), JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(string.Empty, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult SendMessage(MessageModel model)
+        {
+            _message.UpsertMessage(model);
+            ViewBag.Message = "Your message has been sent.";
+            return RedirectToAction("");
         }
     }
 }

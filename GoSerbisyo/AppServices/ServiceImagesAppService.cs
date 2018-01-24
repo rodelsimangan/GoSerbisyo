@@ -14,7 +14,7 @@ namespace GoSerbisyo.AppServices
         {
             _context = context;
         }
-        public List<ServiceImageViewModel> GetServiceImages(int ServiceId)
+        public List<ServiceImageModel> GetServiceImages(int ServiceId)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace GoSerbisyo.AppServices
             }
         }
 
-        public ServiceImageViewModel GetServiceImage(int ServiceImageId)
+        public ServiceImageModel GetServiceImage(int ServiceImageId)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace GoSerbisyo.AppServices
             }
         }
 
-        public void UpsertServiceImage(ServiceImageViewModel input)
+        public void UpsertServiceImage(ServiceImageModel input)
         {
             try
             {

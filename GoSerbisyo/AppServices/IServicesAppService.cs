@@ -10,10 +10,10 @@ namespace GoSerbisyo.AppServices
 {
     public interface IServicesAppService
     {
-        List<ServiceViewModel> GetServices(string UserId);
-        List<ServiceViewModel> GetServices(string name, string location);
-        ServiceViewModel GetService(int ServiceId);
-        void UpsertService(ServiceViewModel input);
+        List<ServiceModel> GetServices(string UserId);
+        List<ServiceModel> GetServices(string name, string location);
+        ServiceModel GetService(int ServiceId);
+        void UpsertService(ServiceModel input);
         void RemoveService(int ServiceId);
     }
 }

@@ -18,6 +18,8 @@ namespace GoSerbisyo.Controllers
         readonly IServicesAppService _services;
         readonly IServiceImagesAppService _serviceImages;
         readonly IMembershipAppService _membership;
+        readonly IServiceRatingsAppService _ratings;
+        readonly IServiceReportsAppService _report;
         readonly IGoSerbisyoDBContext _context;
 
         public ResultsController()
@@ -26,11 +28,13 @@ namespace GoSerbisyo.Controllers
             _services = new ServicesAppService(_context);
             _serviceImages = new ServiceImagesAppService(_context);
             _membership = new MembershipAppService();
+            _ratings = new ServiceRatingsAppService(_context);
+            _report = new ServiceReportsAppService(_context);
         }
 
         public ActionResult Index(string name, string location)
         {
-            List<ServiceViewModel> model = _services.GetServices(name, location);
+            List<ServiceModel> model = _services.GetServices(name, location);
             ViewBag.Message = string.Format("{0} Result(s) for {1}", model.Count(), name);
             return View(model);
         }
@@ -54,31 +58,56 @@ namespace GoSerbisyo.Controllers
         [HttpGet]
         public JsonResult Search()
         {
-            ServiceViewModel model = new ServiceViewModel();
+            ServiceModel model = new ServiceModel();
             ViewBag.Message = "My Service Images.";
             return Json(model);
         }
 
         public ActionResult Details(int s)
         {
-            ResultViewModel model = new ResultViewModel();
+            ResultModel model = new ResultModel();
             var service = _services.GetService(s);
             var user = _membership.GetUser(service.UserId);
-            if(service!=null && user !=null)
+            var ratings = _ratings.GetServiceRatings(s);
+
+            var loginId = _membership.GetUserId(User.Identity.Name);
+
+            if (service!=null && user !=null)
             {
                 model.ServiceId = service.Id;
                 model.ServiceName = service.Name;
                 model.ServiceDescription = service.Description;
                 model.ServiceLocation = service.Location;
                 model.ServiceLinkToProfile = service.LinkToProfile;
+                model.ServiceSendToMessenger = service.SendToMessenger;
 
                 model.UserId = user.Id;
                 model.UserName = user.Name;
                 model.UserLocation = user.Location;
                 model.UserContactNumber = user.ContactNumber;
                 model.UserNameIdentifier = user.NameIdentifier;
+
+                model.PositiveRatings = ratings.Where(r => r.Rating == true).Count();
+                model.NegativeRatings = ratings.Where(r => r.Rating == false).Count();
+                var hasRatings = ratings.Where(r => r.LoginId == loginId).Count();
+                if (hasRatings > 0)
+                    model.RatingGiven = true;
+
+                model.LoginId = loginId;
             }
             return View(model);
+        }
+
+        public ActionResult RateService(RatingModel model)
+        {
+            _ratings.UpsertServiceRating(model);
+            return RedirectToAction("Details", new { s = model.ServiceId });
+        }
+
+        public ActionResult ReportService(ReportModel model)
+        {
+            _report.UpsertServiceReport(model);
+            return RedirectToAction("Details", new { s = model.ServiceId });
         }
     }
 }

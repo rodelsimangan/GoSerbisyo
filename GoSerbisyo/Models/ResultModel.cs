@@ -7,7 +7,7 @@ using System.Web;
 
 namespace GoSerbisyo.Models
 {
-    public class ResultViewModel
+    public class ResultModel
     {
         public int ServiceId { get; set; }
         public string ServiceName { get; set; }
@@ -15,6 +15,7 @@ namespace GoSerbisyo.Models
         public string ServiceLocation { get; set; }
         public string[] ServiceImagesPath { get; set; }
         public bool ServiceLinkToProfile { get; set; }
+        public bool ServiceSendToMessenger { get; set; }
 
         public string UserId { get; set; }
         public string UserName { get; set; }
@@ -23,5 +24,10 @@ namespace GoSerbisyo.Models
         public string UserLocation { get; set; }
         public string UserContactNumber { get; set; }
 
+        public int PositiveRatings { get; set; }
+        public int NegativeRatings { get; set; }
+
+        public bool RatingGiven { get; set; }
+        public string LoginId { get; set; }
     }
 }

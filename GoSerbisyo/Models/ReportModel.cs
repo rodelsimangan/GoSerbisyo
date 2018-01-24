@@ -7,12 +7,13 @@ using System.Web;
 
 namespace GoSerbisyo.Models
 {
-    [Table("ServiceImages")]
-    public class ServiceImageViewModel
+    [Table("Reports")]
+    public class ReportModel
     {
         public int Id { get; set; }
-        public string ServiceId { get; set; }
-        public string ImagePath { get; set; }
+        public string LoginId { get; set; }
+        public int ServiceId { get; set; }
+        public string Comment { get; set; }
         public bool? IsDeleted { get; set; }
     }
 }

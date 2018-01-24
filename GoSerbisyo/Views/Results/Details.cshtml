@@ -1,4 +1,4 @@
-﻿@model GoSerbisyo.Models.ResultViewModel
+﻿@model GoSerbisyo.Models.ResultModel
 
 <div class="col-md-12">
     <div class="col-md-9">
@@ -11,6 +11,7 @@
             <div class="col-md-8">
                 <div id="divServiceImageModal">
                     @Html.HiddenFor(m => m.ServiceId)
+                    @Html.HiddenFor(m => m.LoginId)
                     <p>Load partial view here..</p>
                 </div>
             </div>
@@ -31,7 +32,7 @@
                 <label class="control-label">Posted by:</label>
                 @if (User.Identity.IsAuthenticated && Model.ServiceLinkToProfile)
                 {
-                    <p><a href="@string.Concat("https://www.facebook.com//", Model.UserNameIdentifier)">@Model.UserName</a></p>
+                    <p><a href="@string.Concat("https://www.facebook.com/", Model.UserNameIdentifier)">@Model.UserName</a></p>
                 }
                 else
                 {
@@ -58,9 +59,98 @@
                 }
             </div>
         </div>
+        <div class="row">
+            <div class="form-group">
+                @if (User.Identity.IsAuthenticated && Model.ServiceLinkToProfile)
+                {
+                    <!--a href="@string.Concat("https://m.me/", Model.UserNameIdentifier)" class="vglnk" rel="nofollow">Message us on Facebook</a-->
+                    <a href="@string.Concat("https://www.messenger.com/t/", Model.UserNameIdentifier)" class="vglnk" rel="nofollow">Send message on Facebook</a>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="control-label">Ratings: </label>
+                <p>
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:green;"></span>&nbsp;<span class="badge">@Model.PositiveRatings</span>&nbsp;&nbsp;&nbsp;
+                    <span class="glyphicon glyphicon-minus" aria-hidden="true" style="color:red;"></span>&nbsp;<span class="badge">@Model.NegativeRatings</span>&nbsp;&nbsp;&nbsp;
+
+                </p>
+                @if (!Model.RatingGiven)
+                {
+                    <button id="RateServiceButton" class="btn" data-toggle="modal" data-target="#myRatingModal">Rate this service</button>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <button id="ReportServiceButton" class="btn btn-warning" data-toggle="modal" data-target="#inappropriateModal">Report this service as inapproriate</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myRatingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Rate Service</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="servicerating-id">
+                        <input type="radio" id="rating-positive" name="service-rating" value="positive"> &nbsp;
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:green;"></span>&nbsp;<label for="rating-positive" class="control-label">Positive</label>&nbsp;&nbsp;
+                        <input type="radio" id="rating-negative" name="service-rating" value="negative"> &nbsp;
+                        <span class="glyphicon glyphicon-minus" aria-hidden="true" style="color:red;"></span>&nbsp;<label for="rating-negative" class="control-label">Negative</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="rating-comment" class="control-label">Comment:</label>
+                        <textarea class="form-control" rows="5" id="rating-comment" placeholder="Type-in comment in this service."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnSaveRating" name="btnSaveRating">Send Rating</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="inappropriateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Report service as inapproriate</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="servicereport-id">
+                        <label for="report-comment" class="control-label">Reason:</label>
+                        <textarea class="form-control" rows="5" id="report-comment" placeholder="Type-in comment reason for reporting this service inappropriate."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnSaveReport" name="btnSaveReport">Send Report</button>
+            </div>
+        </div>
     </div>
 </div>
 <script>
+    var serviceRating = true;
+    var serviceRate = "";
+    var serviceId = $('#ServiceId').val();
+    var loginId = $('#LoginId').val();
+
     $(function () {
         var serviceId = $('#ServiceId').val();
         $.ajax({
@@ -80,5 +170,62 @@
         $('.scroll').jscroll({
             autoTrigger: false
         })
+    });
+
+    $("#rating-positive").on("click", function () {
+        serviceRate = $("#rating-positive").val();
+    });
+
+    $("#rating-negative").on("click", function () {
+        serviceRate = $("#rating-negative").val();
+    });
+
+    $('#btnSaveRating').click(function (e) {
+        e.preventDefault();
+        var ratingId = $('#servicerating-id').val();
+        var ratingcomment = $('#rating-comment').val();
+
+        if (serviceRate == "positive")
+            serviceRating = true;
+        else if (serviceRate == "negative")
+            serviceRating = false;
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("RateService","Results")",
+            data: {
+                id: ratingId,
+                serviceid: serviceId,
+                loginid: loginId,
+                comment: ratingcomment,
+                rating: serviceRating,
+            },
+            success: function (data) {
+                $('#myRatingModal').modal('hide');
+                location.reload();
+            },
+        });
+    });
+
+    $('#btnSaveReport').click(function (e) {
+        e.preventDefault();
+        var reportId = $('#servicereport-id').val();
+        var reportcomment = $('#report-comment').val();
+
+        
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("ReportService","Results")",
+            data: {
+                id: reportId,
+                serviceid: serviceId,
+                loginid: loginId,
+                comment: reportcomment,
+            },
+            success: function (data) {
+                $('#myRatingModal').modal('hide');
+                location.reload();
+            },
+        });
     });
 </script>

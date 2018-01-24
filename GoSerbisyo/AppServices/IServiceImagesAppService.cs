@@ -10,9 +10,9 @@ namespace GoSerbisyo.AppServices
 {
     public interface IServiceImagesAppService
     {
-        List<ServiceImageViewModel> GetServiceImages(int ServiceId);
-        ServiceImageViewModel GetServiceImage(int ServiceImageId);
-        void UpsertServiceImage(ServiceImageViewModel input);
+        List<ServiceImageModel> GetServiceImages(int ServiceId);
+        ServiceImageModel GetServiceImage(int ServiceImageId);
+        void UpsertServiceImage(ServiceImageModel input);
         void RemoveServiceImage(int ServiceImageId);
     }
 }
