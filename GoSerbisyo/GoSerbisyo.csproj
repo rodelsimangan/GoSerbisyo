@@ -263,7 +263,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MessageModel.cs" />
     <Compile Include="Models\ReportModel.cs" />
-    <Compile Include="Models\ResultModel.cs" />
+    <Compile Include="Models\ResultViewModel.cs" />
     <Compile Include="Models\WatchlistViewModel.cs" />
     <Compile Include="Models\ServiceImageModel.cs" />
     <Compile Include="Models\RatingModel.cs" />
@@ -355,6 +355,7 @@
     <Content Include="Views\Results\Details.cshtml" />
     <Content Include="Views\Home\PrivacyPolicy.cshtml" />
     <Content Include="Views\Home\TermsofUse.cshtml" />
+    <Content Include="Views\Results\ServiceList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

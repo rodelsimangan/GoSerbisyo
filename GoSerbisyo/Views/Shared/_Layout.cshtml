@@ -3,20 +3,17 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoSerbisyo!</title>
-
+    <title>GoSerbisyo</title>
     <!-- Google fonts -->
     <link href='https://fonts.googleapis.com/css?family=Raleway:400,800' rel='stylesheet' type='text/css'>
     <!-- font awesome -->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-
     <!-- animate.css
     <link rel="stylesheet" href="assets/animate/animate.css" />
         -->
     <!-- favicon -->
-    <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
-    <link rel="icon" href="images/favicon.png" type="image/x-icon">
-
+    <link rel="shortcut icon" href="~/images/logo.png" type="image/x-icon">
+    <link rel="icon" href="~/images/logo.png" type="image/x-icon">
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
@@ -34,37 +31,39 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("GoSerbisyo!", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("GoSerbisyo", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", @style = "font-weight:bold" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    @if(User.Identity.IsAuthenticated)
-                    { 
-                    <li>@Html.ActionLink("My Services", "MyServices", "Home")</li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("My Services", "MyServices", "Home")</li>
+
                     }
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
+                    <!--li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li-->
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                    @Html.Partial("_LoginPartial")
+                </div>
             </div>
         </div>
-    </div>
 
-
-    <div class="container body-content">
-        @RenderBody()
-    </div>
-    <!-- footer -->
-    <div class="footer text-center wowload fadeIn">
-        <div class="social">
-            <a href="#"><i class="fa fa-facebook fa-2x"></i></a>
-            <a href="#"><i class="fa fa-instagram fa-2x"></i></a>
-            <a href="#"><i class="fa fa-twitter fa-2x"></i></a>
-            <a href="#"><i class="fa fa-pinterest fa-2x"></i></a>
+        <div class="container body-content" style="min-height:800px;">
+            @RenderBody()
         </div>
-        Powered by: <a href="http://thebootstrapthemes.com">www.thebootstrapthemes.com</a>
-    </div>
-    <!-- footer -->
-</body>
+        <!-- footer -->
+        <div class="footer text-center wowload fadeIn">
+            <div class="social">
+                <a href="#"><i class="fa fa-facebook fa-2x"></i></a>
+                <a href="#"><i class="fa fa-instagram fa-2x"></i></a>
+                <a href="#"><i class="fa fa-twitter fa-2x"></i></a>
+                <a href="#"><i class="fa fa-pinterest fa-2x"></i></a>
+            </div>
+            Powered by: <a href="http://thebootstrapthemes.com">www.thebootstrapthemes.com</a>
+        </div>
+        <!-- footer -->
+    </body>
 </html>

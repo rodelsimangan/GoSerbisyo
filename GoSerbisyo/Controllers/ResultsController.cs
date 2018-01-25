@@ -34,11 +34,52 @@ namespace GoSerbisyo.Controllers
 
         public ActionResult Index(string name, string location)
         {
-            List<ServiceModel> model = _services.GetServices(name, location);
+            int BlockSize = 9;
+            List<ServiceModel> model = _services.GetServices(name, location, 1, BlockSize);
             ViewBag.Message = string.Format("{0} Result(s) for {1}", model.Count(), name);
             return View(model);
         }
 
+        [ChildActionOnly]
+        public ActionResult ServiceList(List<ServiceModel> Model)
+        {
+            return PartialView(Model);
+        }
+
+        [HttpPost]
+        public ActionResult InfinateScroll(string name, string location, int BlockNumber)
+        {
+            //////////////// THis line of code only for demo. Needs to be removed ///////////////
+            System.Threading.Thread.Sleep(3000);
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            int BlockSize = 9;
+            var books = _services.GetServices(name, location, BlockNumber, BlockSize);
+
+            JsonModel jsonModel = new JsonModel();
+            jsonModel.NoMoreData = books.Count < BlockSize;
+            jsonModel.HTMLString = RenderPartialViewToString("ServiceList", books);
+
+            return Json(jsonModel);
+        }
+
+        protected string RenderPartialViewToString(string viewName, object model)
+        {
+            if (string.IsNullOrEmpty(viewName))
+                viewName = ControllerContext.RouteData.GetRequiredString("action");
+
+            ViewData.Model = model;
+
+            using (StringWriter sw = new StringWriter())
+            {
+                ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                ViewContext viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+
+                return sw.GetStringBuilder().ToString();
+            }
+        }
+        
         public JsonResult GetMyFirstServiceImage(int ServiceId)
         {
             var list = _serviceImages.GetServiceImages(ServiceId);
@@ -65,12 +106,11 @@ namespace GoSerbisyo.Controllers
 
         public ActionResult Details(int s)
         {
-            ResultModel model = new ResultModel();
+            ResultViewModel model = new ResultViewModel();
             var service = _services.GetService(s);
             var user = _membership.GetUser(service.UserId);
             var ratings = _ratings.GetServiceRatings(s);
 
-            var loginId = _membership.GetUserId(User.Identity.Name);
 
             if (service!=null && user !=null)
             {
@@ -89,11 +129,15 @@ namespace GoSerbisyo.Controllers
 
                 model.PositiveRatings = ratings.Where(r => r.Rating == true).Count();
                 model.NegativeRatings = ratings.Where(r => r.Rating == false).Count();
-                var hasRatings = ratings.Where(r => r.LoginId == loginId).Count();
-                if (hasRatings > 0)
-                    model.RatingGiven = true;
+                if (User.Identity.IsAuthenticated)
+                {
+                    var loginId = _membership.GetUserId(User.Identity.Name);
+                    var hasRatings = ratings.Where(r => r.LoginId == loginId).Count();
+                    if (hasRatings > 0)
+                        model.RatingGiven = true;
 
-                model.LoginId = loginId;
+                    model.LoginId = loginId;
+                }
             }
             return View(model);
         }

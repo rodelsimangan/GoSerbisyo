@@ -1,10 +1,10 @@
-﻿@model List<GoSerbisyo.Models.ServiceViewModel>
+﻿@model List<GoSerbisyo.Models.ServiceModel>
 
 @{
     ViewBag.Title = "My Services";
 }
 
-<div class="row margin-bottom-5 admin-content">
+<div class="row margin-top-15">
     <div class="col-xs-12">
         <div class="col-xs-6">
             <div class="page-head">
@@ -32,11 +32,11 @@
                         &nbsp;
                     </div>
                 </div>
-                <div class="col-xs-12">
+                <div class="col-xs-12 loadservice">
                     <div class="row">&nbsp;</div>
-                    
-                    @if(Model.Count() > 0)
-                    { 
+
+                    @if (Model.Count() > 0)
+                    {
                         for (int i = 0; i < Model.Count(); i++)
                         {
                             var ctr = i % 3;
@@ -49,7 +49,7 @@
                                 <div class="col-xs-4">
                                     <span style="font-weight:bold"><a href="#" id="@item.Id" class="UpdateServiceButton">@item.Name</a></span><br />
                                     <button id="@item.Id" class="btn btn-circle btn-xs red AddServiceImageButton">
-                                        <img id="@item.Id" class="img-thumbnail imgService " alt="Add Image" />
+                                        <img id="@item.Id" class="img-thumbnail imgService" alt="Add Image" />
                                     </button>
                                     <!--button data-toggle="modal" id="@*item.Id*@" class="btn btn-circle btn-xs red UpdateGalleryButton"><span class="fa fa-edit"></span></button-->
 
@@ -58,7 +58,7 @@
                                 if ((ctr == Model.Count - 1) || (ctr == 2))
                                 {
                                     @:</div><div class="row">&nbsp;</div>
-                            }
+                                }
                         }
                     }
                     else
@@ -131,12 +131,14 @@
 
 <script>
 
-    $(function () {
-
-        var serviceId = $('.imgService').prop('id');
+    /* $(document).ready(function (e) {
+        $('.loadservice img').each(function () {
+            alert($(this).attr('src'))
+        });
+       var serviceId = $('.imgService').prop('id');
          $.ajax({
             type: "Get",
-            url: "@Url.Action("GetMyFirstServiceImage","Home")",
+            url: "Url.Action("GetMyFirstServiceImage","Home")",
             data: {
                 serviceId: serviceId,
             },
@@ -144,9 +146,28 @@
                 $('.imgService').attr('src', "/Uploads/ServiceImages/" + data);
             },
 
-        });
+        }); */
+    
+       /* var serviceId = $('.imgService').prop('id');
+         $.ajax({
+            type: "Get",
+            url: "Url.Action("GetMyFirstServiceImage","Home")",
+            data: {
+                serviceId: serviceId,
+            },
+            success: function (data) {
+                $('.imgService').attr('src', "/Uploads/ServiceImages/" + data);
+            },
 
+        }); 
+
+    });*/
+    $('.loadservice img').each(function () {
+        
+        //it can also be $(window) 
+        alert($(this).attr('src'));
     });
+
 
     $('#btnSave').click(function (e) {
         e.preventDefault();
@@ -189,8 +210,8 @@
                 $('#service-name').val(data.Name);
                 $('#service-description').val(data.Description);
                 $('#service-location').val(data.Location);
-                $('#service-linktoprofile').prop("checked", data.LinkToProfile);                
-                $('#service-sendtomessenger').prop("checked", data.SendToMessenger);                
+                $('#service-linktoprofile').prop("checked", data.LinkToProfile);
+                $('#service-sendtomessenger').prop("checked", data.SendToMessenger);
                 $('#myServiceModal').modal('show');
             },
         });

@@ -36,7 +36,7 @@ namespace GoSerbisyo.AppServices
             {
                 var query = from q in _context.Services
                             where q.IsDeleted == false || q.IsDeleted == null
-                            && (string.IsNullOrEmpty(name) ||  q.Name.ToLower().Contains(name.ToLower())) && (string.IsNullOrEmpty(location) ||  q.Location.ToLower().Contains(location.ToLower()))
+                            && (string.IsNullOrEmpty(name) || q.Name.ToLower().Contains(name.ToLower())) && (string.IsNullOrEmpty(location) || q.Location.ToLower().Contains(location.ToLower()))
                             select q;
 
                 return query.ToList();
@@ -46,6 +46,27 @@ namespace GoSerbisyo.AppServices
                 throw ex;
             }
         }
+
+        public List<ServiceModel> GetServices(string name, string location, int BlockNumber, int BlockSize)
+        {
+            try
+            {
+                int startIndex = (BlockNumber - 1) * BlockSize;
+
+                var query = from q in _context.Services
+                            where q.IsDeleted == false || q.IsDeleted == null
+                            && (string.IsNullOrEmpty(name) || q.Name.ToLower().Contains(name.ToLower())) && (string.IsNullOrEmpty(location) || q.Location.ToLower().Contains(location.ToLower()))
+                            select q;
+
+                var services = query.ToList().Skip(startIndex).Take(BlockSize);
+                return services.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public ServiceModel GetService(int ServiceId)
         {
             try

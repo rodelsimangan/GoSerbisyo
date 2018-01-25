@@ -7,7 +7,7 @@ using System.Web;
 
 namespace GoSerbisyo.Models
 {
-    public class ResultModel
+    public class ResultViewModel
     {
         public int ServiceId { get; set; }
         public string ServiceName { get; set; }
@@ -29,5 +29,11 @@ namespace GoSerbisyo.Models
 
         public bool RatingGiven { get; set; }
         public string LoginId { get; set; }
+    }
+
+    public class JsonModel
+    {
+        public string HTMLString { get; set; }
+        public bool NoMoreData { get; set; }
     }
 }

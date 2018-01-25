@@ -1,4 +1,4 @@
-﻿@model List<GoSerbisyo.Models.ServiceViewModel>
+﻿@model List<GoSerbisyo.Models.ServiceModel>
 
 @{
     ViewBag.Title = "Results";
@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="col-xs-12 text-left" id="divSeach">
-                @{Html.RenderPartial("Search", new GoSerbisyo.Models.ServiceViewModel());}
+                @{Html.RenderPartial("Search", new GoSerbisyo.Models.ServiceModel());}
                 <!--form class="form-inline">
                     <div class="form-group">
                         <input type="text" class="form-control" id="service-name" style="width:350px" placeholder="Service: Ex. Van Rental, Aircon Cleaning"> &nbsp;&nbsp;
@@ -26,35 +26,19 @@
                 <h4>@ViewBag.Message</h4><hr />
             </div>
             <div class="col-xs-12">
-                <div>
-                    <div class="row">&nbsp;</div>
-                    @for (int i = 0; i < Model.Count(); i++)
-                    {
-                        var ctr = i % 3;
-
-                        if (ctr == 0)
-                        {
-                            @:<div class="row">
-                            }
-                            var item = Model[i];
-                                  <div class="col-xs-4 text-center">
-                                      <span style="font-weight:bold; text-align:center;"><a href="@Url.Action("Details","Results", new { s = item.Id  })" target="_blank" id="@item.Id"> @item.Name</a> </span><br /><br />
-                                      <span style="font-weight:bold; text-align:center;"> @item.Location </span><br /><br />                                      
-                                      <img id="@item.Id" class="img-thumbnail imgService " alt="Add Image" />                                      
-                                  </div>
-                            if ((ctr == Model.Count - 1) || (ctr == 2))
-                            {
-                                @:</div><div class="row">&nbsp;</div>
-                            }
-                    }
+                <div id="serviceListDiv">
+                    @{Html.RenderAction("ServiceList", "Results", new { Model = Model });}
                 </div>
-                </div>
+                <div id="loadingDiv" style="text-align: center; display: none; margin-bottom: 20px;">
+                    <img alt="Loading" src="@Url.Content("~/images/ajax-loader.gif")" />
+                </div>               
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-
+<script>
+   
     $(function () {
 
         var serviceId = $('.imgService').prop('id');
@@ -79,13 +63,13 @@
                 $('#divSeach').html(data);
             },
          });
-          
+
     });
 
     $('#btnSearch').click(function (e) {
         e.preventDefault();
-        var serviceName = $('#service-name').val();
-        var serviceLoc = $('#service-location').val();
+        var serviceName = $('#Name').val();
+        var serviceLoc = $('#Location').val();
         $.ajax({
             type: "POST",
             url: "@Url.Action("","Results")",
@@ -98,5 +82,27 @@
             },
         });
     });
-        
-    </script>
+
+    var BlockNumber = 2;  //Infinate Scroll starts from second block
+    var NoMoreData = false;
+    var inProgress = false;
+    $(window).scroll(function () {
+        var serviceName = $('#Name').val();
+        var serviceLoc = $('#Location').val();
+        if ($(window).scrollTop() == $(document).height() - $(window).height() && !NoMoreData && !inProgress) {
+
+            inProgress = true;
+            $("#loadingDiv").show();
+
+            $.post("@Url.Action("InfinateScroll", "Results")", { "name": serviceName, "location": serviceLoc , "BlockNumber": BlockNumber  },
+                    function (data) {
+
+                        BlockNumber = BlockNumber + 1;
+                        NoMoreData = data.NoMoreData;
+                        $("#serviceListDiv").append(data.HTMLString);
+                        $("#loadingDiv").hide();
+                        inProgress = false;
+                    });
+        }
+    });
+</script>

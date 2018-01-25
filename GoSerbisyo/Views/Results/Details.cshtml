@@ -1,4 +1,4 @@
-﻿@model GoSerbisyo.Models.ResultModel
+﻿@model GoSerbisyo.Models.ResultViewModel
 
 <div class="col-md-12">
     <div class="col-md-9">
@@ -55,7 +55,7 @@
                 }
                 else
                 {
-                    <p>@Html.ActionLink("Login", "Login", "Account") to view Contact Number</p>
+                    <p>@Html.ActionLink("Login", "Login", "Account", new { returnUrl = Request.RawUrl }, null) to view Contact Number</p>
                 }
             </div>
         </div>
@@ -76,15 +76,29 @@
                     <span class="glyphicon glyphicon-minus" aria-hidden="true" style="color:red;"></span>&nbsp;<span class="badge">@Model.NegativeRatings</span>&nbsp;&nbsp;&nbsp;
 
                 </p>
-                @if (!Model.RatingGiven)
+                @if (User.Identity.IsAuthenticated && !Model.RatingGiven)
                 {
                     <button id="RateServiceButton" class="btn" data-toggle="modal" data-target="#myRatingModal">Rate this service</button>
+                }
+                else
+                {
+                    if (!User.Identity.IsAuthenticated)
+                    {
+                        <p>@Html.ActionLink("Login", "Login", "Account", new { returnUrl = Request.RawUrl }, null) to rate this service</p>
+                    }
                 }
             </div>
         </div>
         <div class="row">
             <div class="form-group">
-                <button id="ReportServiceButton" class="btn btn-warning" data-toggle="modal" data-target="#inappropriateModal">Report this service as inapproriate</button>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <button id="ReportServiceButton" class="btn btn-warning" data-toggle="modal" data-target="#inappropriateModal">Report this service as inapproriate</button>
+                }
+                else
+                {
+                    <p>@Html.ActionLink("Login", "Login", "Account", new { returnUrl = Request.RawUrl }, null) to report this service as inappropriate</p>
+                }
             </div>
         </div>
     </div>
@@ -212,7 +226,7 @@
         var reportId = $('#servicereport-id').val();
         var reportcomment = $('#report-comment').val();
 
-        
+
         $.ajax({
             type: "POST",
             url: "@Url.Action("ReportService","Results")",

@@ -12,6 +12,7 @@ namespace GoSerbisyo.AppServices
     {
         List<ServiceModel> GetServices(string UserId);
         List<ServiceModel> GetServices(string name, string location);
+        List<ServiceModel> GetServices(string name, string location, int BlockNumber, int BlockSize);
         ServiceModel GetService(int ServiceId);
         void UpsertService(ServiceModel input);
         void RemoveService(int ServiceId);
