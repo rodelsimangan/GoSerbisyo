@@ -262,6 +262,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MessageModel.cs" />
+    <Compile Include="Models\RatingViewModel.cs" />
     <Compile Include="Models\ReportModel.cs" />
     <Compile Include="Models\ResultViewModel.cs" />
     <Compile Include="Models\WatchlistViewModel.cs" />
@@ -295,6 +296,24 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
+    <Content Include="images\ajax-loader.gif" />
+    <Content Include="images\app-store.png" />
+    <Content Include="images\bg.png" />
+    <Content Include="images\favicon.ico" />
+    <Content Include="images\favicon.png" />
+    <Content Include="images\for-hire.png" />
+    <Content Include="images\for-hire_1.png" />
+    <Content Include="images\for-hire_2.png" />
+    <Content Include="images\google-play.png" />
+    <Content Include="images\iphone.png" />
+    <Content Include="images\logo.png" />
+    <Content Include="images\logo1.png" />
+    <Content Include="images\logo_Svz_icon.ico" />
+    <Content Include="images\photos\1.jpg" />
+    <Content Include="images\photos\2.jpg" />
+    <Content Include="images\photos\3.jpg" />
+    <Content Include="images\service.jpg" />
+    <Content Include="images\sublime.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
@@ -356,6 +375,9 @@
     <Content Include="Views\Home\PrivacyPolicy.cshtml" />
     <Content Include="Views\Home\TermsofUse.cshtml" />
     <Content Include="Views\Results\ServiceList.cshtml" />
+    <Content Include="Views\Home\ServiceList.cshtml" />
+    <Content Include="Views\Results\ShowNegativeComments.cshtml" />
+    <Content Include="Views\Results\ShowPositiveComments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

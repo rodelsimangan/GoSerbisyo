@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -127,8 +128,8 @@ namespace GoSerbisyo.Controllers
                     MemoryStream ms = new MemoryStream();
                     WebImage img = new WebImage(_comPath);
 
-                    if (img.Width > 200)
-                        img.Resize(200, 200);
+                    //if (img.Width > 200)
+                    //    img.Resize(200, 200);
                     img.Save(_comPath);
                     // end resize
                 }
@@ -156,7 +157,10 @@ namespace GoSerbisyo.Controllers
             {
                 var list = _serviceImages.GetServiceImages(ServiceId);
                 var model = list.FirstOrDefault();
-                return Json(Convert.ToString(model.ImagePath), JsonRequestBehavior.AllowGet);
+                if (model != null)
+                    return Json(Convert.ToString(model.ImagePath), JsonRequestBehavior.AllowGet);
+                else
+                    return Json(string.Empty, JsonRequestBehavior.AllowGet);
             }
             catch
             {
@@ -169,6 +173,12 @@ namespace GoSerbisyo.Controllers
             _message.UpsertMessage(model);
             ViewBag.Message = "Your message has been sent.";
             return RedirectToAction("");
+        }
+
+        [ChildActionOnly]
+        public ActionResult ServiceList(List<ServiceModel> Model)
+        {
+            return PartialView(Model);
         }
     }
 }

@@ -153,5 +153,38 @@ namespace GoSerbisyo.Controllers
             _report.UpsertServiceReport(model);
             return RedirectToAction("Details", new { s = model.ServiceId });
         }
+
+        public PartialViewResult ShowNegativeComments(int serviceId)
+        {
+            List<RatingViewModel> model = new List<RatingViewModel>();
+            var ratings = _ratings.GetServiceRatings(serviceId).Where(q=> q.Rating == false).ToList();
+            for(int i = 0; i< ratings.Count(); i++)
+            {
+                var item = ratings[i];
+                RatingViewModel comment = new RatingViewModel();
+                comment.Id = item.Id;
+                comment.LoginName = _membership.GetUser(item.LoginId).Name;
+                comment.Comment = item.Comment;
+                model.Add(comment);
+            }            
+            return PartialView(model);
+        }
+
+        public PartialViewResult ShowPositiveComments(int serviceId)
+        {
+            List<RatingViewModel> model = new List<RatingViewModel>();
+            var ratings = _ratings.GetServiceRatings(serviceId).Where(q => q.Rating == true).ToList();
+            for (int i = 0; i < ratings.Count(); i++)
+            {
+                var item = ratings[i];
+                RatingViewModel comment = new RatingViewModel();
+                comment.Id = item.Id;
+                comment.LoginName = _membership.GetUser(item.LoginId).Name;
+                comment.Comment = item.Comment;
+                model.Add(comment);
+            }
+            return PartialView(model);
+        }
+
     }
 }

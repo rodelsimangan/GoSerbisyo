@@ -40,12 +40,12 @@
                 }
             </div>
         </div>
-        <div class="row">
+        <!--div class="row">
             <div class="form-group">
                 <label class="control-label">Location:</label>
-                <p>@Model.UserLocation</p>
+                <p>@*Model.UserLocation*@</p>
             </div>
-        </div>
+        </div-->
         <div class="row">
             <div class="form-group">
                 <label class="control-label">Contact No.(s):</label>
@@ -61,7 +61,7 @@
         </div>
         <div class="row">
             <div class="form-group">
-                @if (User.Identity.IsAuthenticated && Model.ServiceLinkToProfile)
+                @if (User.Identity.IsAuthenticated && Model.ServiceSendToMessenger)
                 {
                     <!--a href="@string.Concat("https://m.me/", Model.UserNameIdentifier)" class="vglnk" rel="nofollow">Message us on Facebook</a-->
                     <a href="@string.Concat("https://www.messenger.com/t/", Model.UserNameIdentifier)" class="vglnk" rel="nofollow">Send message on Facebook</a>
@@ -72,8 +72,26 @@
             <div class="form-group">
                 <label class="control-label">Ratings: </label>
                 <p>
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:green;"></span>&nbsp;<span class="badge">@Model.PositiveRatings</span>&nbsp;&nbsp;&nbsp;
-                    <span class="glyphicon glyphicon-minus" aria-hidden="true" style="color:red;"></span>&nbsp;<span class="badge">@Model.NegativeRatings</span>&nbsp;&nbsp;&nbsp;
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:green;"></span>
+                    @if (Model.PositiveRatings > 0)
+                    {
+                        <button id="@Model.ServiceId" type="button" class="btn btn-link showPositiveComments" style="padding: 0px;" ><span class="badge">@Model.PositiveRatings</span></button>
+                    }
+                    else
+                    {
+                        <span class="badge">@Model.PositiveRatings</span>
+                    }
+                    &nbsp; &nbsp; &nbsp;
+                    <span class="glyphicon glyphicon-minus" aria-hidden="true" style="color:red;"></span>
+                    @if (Model.NegativeRatings > 0)
+                    {
+                        <button id="@Model.ServiceId" type="button" class="btn btn-link showNegativeComments" style="padding: 0px;" ><span class="badge">@Model.NegativeRatings</span></button>
+                    }
+                    else
+                    {
+                        <span class="badge">@Model.NegativeRatings</span>
+                    }
+                    &nbsp; &nbsp; &nbsp;
 
                 </p>
                 @if (User.Identity.IsAuthenticated && !Model.RatingGiven)
@@ -155,6 +173,48 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="btnSaveReport" name="btnSaveReport">Send Report</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="negativeRatingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Negative Ratings</h4>
+            </div>
+            <div class="modal-body">
+                <div id="divNegativeRatings"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="positiveRatingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Positive Ratings</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="servicereport-id">
+                        <label for="report-comment" class="control-label">Reason:</label>
+                        <textarea class="form-control" rows="5" id="report-comment" placeholder="Type-in comment reason for reporting this service inappropriate."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -242,4 +302,37 @@
             },
         });
     });
+
+    $('.showNegativeComments').click(function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("ShowNegativeComments","Results")",
+            data: {
+                serviceid: serviceId,
+            },
+            success: function (data) {
+                $('#divNegativeRatings').html(data);
+                $('#negativeRatingModal').modal('show');
+            },
+        });
+    });
+
+     $('.showPositiveComments').click(function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("ShowPositiveComments", "Results")",
+            data: {
+                serviceid: serviceId,
+            },
+            success: function (data) {
+                $('#divPositiveRatings').html(data);
+                $('#positiveRatingModal').modal('show');
+            },
+        });
+    });
+
 </script>

@@ -18,7 +18,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="col-xs-18">
+                <div class="col-xs-12">
                     <div class="col-xs-2 text-left">
                         &nbsp;
                     </div>
@@ -32,41 +32,10 @@
                         &nbsp;
                     </div>
                 </div>
-                <div class="col-xs-12 loadservice">
-                    <div class="row">&nbsp;</div>
-
-                    @if (Model.Count() > 0)
-                    {
-                        for (int i = 0; i < Model.Count(); i++)
-                        {
-                            var ctr = i % 3;
-
-                            if (ctr == 0)
-                            {
-                                @:<div class="row">
-                                }
-                                var item = Model[i];
-                                <div class="col-xs-4">
-                                    <span style="font-weight:bold"><a href="#" id="@item.Id" class="UpdateServiceButton">@item.Name</a></span><br />
-                                    <button id="@item.Id" class="btn btn-circle btn-xs red AddServiceImageButton">
-                                        <img id="@item.Id" class="img-thumbnail imgService" alt="Add Image" />
-                                    </button>
-                                    <!--button data-toggle="modal" id="@*item.Id*@" class="btn btn-circle btn-xs red UpdateGalleryButton"><span class="fa fa-edit"></span></button-->
-
-
-                                </div>
-                                if ((ctr == Model.Count - 1) || (ctr == 2))
-                                {
-                                    @:</div><div class="row">&nbsp;</div>
-                                }
-                        }
-                    }
-                    else
-                    {
-                        <div class="col-xs-12 text-center">
-                            <h4>No Service(s).</h4>
-                        </div>
-                    }
+                <div class="col-xs-12">
+                    <div id="serviceListDiv">
+                        @{Html.RenderAction("ServiceList", "Home", new { Model = Model });}
+                    </div>
                 </div>
 
             </div>
@@ -131,41 +100,26 @@
 
 <script>
 
-    /* $(document).ready(function (e) {
-        $('.loadservice img').each(function () {
-            alert($(this).attr('src'))
+  $(function () {
+
+      $(".imgService").each(function (e) {
+            e.preventDefault;
+            var serviceId = $(this).prop('id');
+
+            var $image = $(this);
+            $.ajax({
+                type: "Get",
+                url: "@Url.Action("GetMyFirstServiceImage","Home")",
+                data: {
+                    serviceId: serviceId,
+                },
+                success: function (data) {
+                    if(data != "")
+                        $image.attr("src", "/Uploads/ServiceImages/" + data);
+                },
+            });
+
         });
-       var serviceId = $('.imgService').prop('id');
-         $.ajax({
-            type: "Get",
-            url: "Url.Action("GetMyFirstServiceImage","Home")",
-            data: {
-                serviceId: serviceId,
-            },
-            success: function (data) {
-                $('.imgService').attr('src', "/Uploads/ServiceImages/" + data);
-            },
-
-        }); */
-    
-       /* var serviceId = $('.imgService').prop('id');
-         $.ajax({
-            type: "Get",
-            url: "Url.Action("GetMyFirstServiceImage","Home")",
-            data: {
-                serviceId: serviceId,
-            },
-            success: function (data) {
-                $('.imgService').attr('src', "/Uploads/ServiceImages/" + data);
-            },
-
-        }); 
-
-    });*/
-    $('.loadservice img').each(function () {
-        
-        //it can also be $(window) 
-        alert($(this).attr('src'));
     });
 
 
@@ -221,6 +175,7 @@
 
         e.preventDefault();
         var serviceId = $(this).prop('id');
+        alert(serviceId);
          $.ajax({
             type: "Get",
             url: "@Url.Action("MyServiceImages", "Home")",
@@ -228,7 +183,6 @@
                 serviceId: serviceId,
             },
             success: function (data) {
-                console.log(data);
                 $('#divServiceImageModal').html(data);
                 $('#myServiceImageModal').modal('show');
             }

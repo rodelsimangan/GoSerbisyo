@@ -38,34 +38,30 @@
 </div>
 
 <script>
-   
+
     $(function () {
 
-        var serviceId = $('.imgService').prop('id');
-         $.ajax({
-            type: "Get",
-            url: "@Url.Action("GetMyFirstServiceImage","Home")",
-            data: {
-                serviceId: serviceId,
-            },
-            success: function (data) {
-                $('.imgService').attr('src', "/Uploads/ServiceImages/" + data);
-            },
+        $(".imgService").each(function (e) {
+            e.preventDefault;
+            var serviceId = $(this).prop('id');
+
+            var $image = $(this);
+            $.ajax({
+                type: "Get",
+                url: "@Url.Action("GetMyFirstServiceImage","Home")",
+                data: {
+                    serviceId: serviceId,
+                },
+                success: function (data) {
+                    if(data != "")
+                        $image.attr("src", "/Uploads/ServiceImages/" + data);
+                },
+            });
+
         });
-
-           $.ajax({
-            type: "Get",
-            url: "@Url.Action("Search","Results")",
-            data: {
-                serviceId: serviceId,
-            },
-            success: function (data) {
-                $('#divSeach').html(data);
-            },
-         });
-
     });
 
+    
     $('#btnSearch').click(function (e) {
         e.preventDefault();
         var serviceName = $('#Name').val();

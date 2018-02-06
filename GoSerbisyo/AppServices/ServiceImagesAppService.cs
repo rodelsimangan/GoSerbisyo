@@ -20,6 +20,7 @@ namespace GoSerbisyo.AppServices
             {
                 var query = from q in _context.ServiceImages
                             where q.IsDeleted == false || q.IsDeleted == null
+                            && q.ServiceId == ServiceId.ToString()
                             select q;
 
                 return query.ToList();
