@@ -10,17 +10,17 @@
             @:<div class="row">
             }
             var item = Model[i];
-                  <div class="col-xs-4 text-center">
-                      <button id="@item.Id" class="btn btn-circle btn-xs red AddServiceImageButton">
-                          <img id="@item.Id" class="img-thumbnail imgService" alt="Add Image" />
-                      </button><br />
-                    <span style="font-weight:bold"><a href="#" id="@item.Id" class="UpdateServiceButton">@item.Name </a></span>
-                      <!--button data-toggle="modal" id="@*item.Id*@" class="btn btn-circle btn-xs red UpdateGalleryButton"><span class="fa fa-edit"></span></button-->
-                  </div>
+            <div class="col-xs-4 text-center">
+                <button id="@item.Id" class="btn btn-circle btn-xs red AddServiceImageButton">
+                    <img id="@item.Id" class="img-thumbnail imgService" alt="Add Image" />
+                </button><br />
+                <span style="font-weight:bold"><a href="#" id="@item.Id" class="UpdateServiceButton">@item.Name </a></span>
+                <button data-toggle="modal" id="@item.Id" class="btn btn-circle btn-xs red UpdateGalleryButton"><span class="fa fa-trash"></span></button>
+            </div>
             if ((i == Model.Count() - 1) || (ctr == 2))
             {
                 @:</div><div class="row">&nbsp;</div>
             }
-       
+
     }
 </div>

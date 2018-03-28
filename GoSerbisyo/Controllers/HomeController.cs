@@ -56,6 +56,27 @@ namespace GoSerbisyo.Controllers
             return View();
         }
 
+        public ActionResult PrivacyPolicy()
+        {
+            ViewBag.Message = "Privacy Policy";
+
+            return View();
+        }
+
+        public ActionResult TermsOfUse()
+        {
+            ViewBag.Message = "Terms Of Use.";
+
+            return View();
+        }
+
+        public ActionResult Disclaimer()
+        {
+            ViewBag.Message = "Terms Of Use.";
+
+            return View();
+        }
+
         public ActionResult MyServices()
         {
             ViewBag.Message = "My Services.";

@@ -1,41 +1,24 @@
-﻿@model dynamic
-<style>
-    p{
-        text-align:left;
-    }
-</style>
-<div class="container">
-    <div class="divPanel">
-        <!--Edit Main Content Area here-->
-        <div id="divMain">
-            <div class="row-fluid">
-                <div class="span1"></div>
-                <div class="span11">
-                    <div class="breadcrumb">
-                        <!--h5>Terms and Conditions</h5-->
-                    </div>
-                </div>
+﻿
+<div class="about spacer" id="about">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 wowload fadeInLeftBig">
+                <h3>TERMS OF USE</h3>
+                <ul>
+                    <li><p>This document denotes the legal policies of GoSerbisyo with regard to the use of its services. Signing up for an account means that you have read the following policies and have agreed to the associated terms;</p></li>
+                    <li><p>Each member is allowed to have only one login account. Registering and using multiple accounts simultaneously is prohibited. Sharing, transferring, borrowing, or acquiring ownership of accounts is likewise prohibited;</p></li>
+                    <li><p>GoSerbisyo reserves the right to deny the use of its services to anyone at anytime for any reason whatsoever on its sole discretion and without any notice. Denial of services may be applied in any way chosen by GoSerbisyo;</p></li>
+                    <li><p>GoSerbisyo (represented by the creators of the site, moderators and administrators) reserves the right to delete, remove, edit, alter, change any data on the website without any form of notice to its users;</p></li>
+                    <li><p>GoSerbisyo does not guarantee the constant availability of its services to its users;</p></li>
+                    <li><p>GoSerbisyo prohibits the use of this site to infringe any copyrighted materials or services and the like;</p></li>
+                    <li><p>GoSerbisyo prohibits the use of its facilities as a means to convey profanity, vulgarity, discriminatory, defamatory, inaccurate, obscene, hostile remarks, or otherwise violates the law;</p></li>
+                    <li><p>IN NO EVENT SHALL GoSerbisyo, ITS OFFICERS, DIRECTORS, AND EMPLOYEES, BE LIABLE FOR LOST PROFITS OR ANY SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR IN CONNECTION WITH GoSerbisyo's SITE, ITS SERVICES OR THIS AGREEMENT (HOWEVER ARISING, INCLUDING NEGLIGENCE).</p></li>
+                    <li><p>You agree to indemnify and hold GoSerbisyo harmless from any claim or demand, including reasonable attorneys' fees, made by any third party due to or arising out of your breach of this Agreement or the documents it incorporates by reference, or your violation of any law or the rights of a third party;</p></li>
+                    <li><p>All rules and policies stated and relevant advisories posted in the website shall form part of this Terms of Use;</p></li>
+                    <li><p>Violation of any of our rules and policies shall be grounds for the offending user to be restricted from accessing this website. Furthermore GoSerbisyo reserves the right to pursue any legal action deemed necessary;</p></li>
+                    <li><p>GoSerbisyo reserves the right to make changes to these policies at any time for any reason conceived by the group without prior notice.</p></li>
+                </ul>
             </div>
-            <div class="row-fluid">
-                <div class="span1"></div>
-                <div class="span10" id="divCMSContent">
-                    <div class="row-fluid">
-                        @foreach (var item in (IEnumerable<CMSModels.TermsofUse>)ViewData["TermsofUseList"])
-                        {
-                            <div class="col-md-12" style="word-break:break-all; word-wrap:break-word; text-align:center;"><h4>@item.Title</h4></div>
-                            <div class="col-md-12" style="word-break:break-all; word-wrap:break-word; text-align:center;"><span style="font-weight:bold">@item.Subtitle</span></div>
-                            <br />
-                            <div class="col-md-8 editor-label" style="padding-right:20px; text-align:left!important;">
-                                 @Html.Raw(System.Web.HttpUtility.HtmlDecode(item.Markup))
-                            </div>
-                        }
-
-                    </div>
-                </div>
-                <div class="span1"></div>
-            </div>
-            <!--End Main Content-->
         </div>
-        <!--div id="footerInnerSeparator"></div-->
     </div>
 </div>
